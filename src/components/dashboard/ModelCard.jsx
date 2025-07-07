@@ -74,7 +74,7 @@ const ModelCard = ({ title, description, badge }) => {
             valueClassName="text-[20px]"
           />
           <ModelInfo
-            title={"Predicted Price"}
+            title={"Current Price"}
             value={`$2645.50`}
             infoClassName="items-end"
           />
