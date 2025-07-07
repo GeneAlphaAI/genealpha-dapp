@@ -17,10 +17,14 @@ const FrameProgress = ({ progress, timeLeft }) => {
     <div className="space-y-2">
       <div className="flex justify-between text-xs uppercase text-dull-white">
         <span className="text-xs font-jetbrains-mono font-regular">
-          Closing in {formatCountdown(timeLeft)}
+          {timeLeft == 0 ? (
+            <>Closed</>
+          ) : (
+            <>Closing in {formatCountdown(timeLeft)}</>
+          )}
         </span>
         <span className="text-xs font-jetbrains-mono font-regular">
-          {progress.toFixed(1)}%
+          {progress.toFixed(0)}%
         </span>
       </div>
       <div className="w-full h-1 bg-white/10 overflow-hidden rounded-full">
