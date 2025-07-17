@@ -41,7 +41,14 @@ const Header = ({ onHamburgerClick, isDrawerOpen, onCloseDrawer }) => {
           <Refresh duration={15} />
           <ModelStatus />
           <Balance />
-          <WalletAddress />
+
+          <ProfileDropdown
+            icon="/assets/dashboard/DownArrow.svg"
+            position="left"
+            triggerClassName="bg-white/10 backdrop-blur-lg gap-2 border-stroke-gray text-xs"
+            labelClassName="text-dull-white"
+            contentClassName="bg-white/10 backdrop-blur-lg border-1 border-stroke-gray text-xs"
+          />
         </div>
 
         <div className="flex 1xl:hidden items-center gap-4">

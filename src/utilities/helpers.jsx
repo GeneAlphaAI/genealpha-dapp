@@ -12,3 +12,9 @@ export const formatValue = (value) => {
   // Return as-is for alphanumeric strings (like addresses)
   return value;
 };
+
+export function truncateMiddle(text, maxLength) {
+  if (text?.length <= maxLength) return text;
+  const half = Math.floor(maxLength / 2);
+  return `${text?.slice(0, half)}...${text?.slice(-half)}`;
+}

@@ -52,7 +52,10 @@ const Refresh = ({ duration = 5 }) => {
           />
         </div>
       </div>
-      <h4 className="text-dull-white text-xs">Pause Auto-Refresh</h4>
+      <h4 className="text-dull-white hidden xs:block text-xs">
+        Pause Auto-Refresh
+      </h4>
+      <h4 className="text-dull-white block xs:hidden text-xs">Pause Refresh</h4>
     </div>
   );
 };

@@ -1,6 +1,9 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import Dropdown from "../../utilities/Dropdown";
+import Refresh from "../header/Refresh";
+import Balance from "../header/Balance";
+import ModelStatus from "../header/ModelStatus";
 
 const MobileSidebar = ({ isOpen }) => {
   const location = useLocation();
@@ -40,16 +43,33 @@ const MobileSidebar = ({ isOpen }) => {
         isOpen ? "translate-x-0" : "-translate-x-full"
       } 1xl:hidden`}
     >
-      <Dropdown
-        options={options}
-        holderText="Show Predictions: "
-        icon="/assets/dashboard/DownArrow.svg"
-        position="left"
-        triggerClassName="bg-white/10 gap-2 w-full text-xs"
-        labelClassName="text-dull-white"
-        contentClassName="bg-white/10 backdrop-blur-lg text-xs"
-      />
-      <div className="py-10">
+      <div className="flex lg:hidden flex-col border-b-[0.5px] border-stroke-gray mb-4">
+        <h3 className="text-md font-jetbrains-mono text-low-opacity">
+          GA Balance
+        </h3>
+        <p className="text-lg font-jetbrains-mono">0</p>
+      </div>
+      <div className="border-b-[0.5px] border-stroke-gray pb-4">
+        <Dropdown
+          options={options}
+          holderText="Show Predictions: "
+          icon="/assets/dashboard/DownArrow.svg"
+          position="left"
+          triggerClassName="bg-white/10 gap-2 w-full text-xs"
+          labelClassName="text-dull-white"
+          contentClassName="bg-white/10 backdrop-blur-lg text-xs"
+        />
+        <div className="flex lg:hidden w-full border-1 rounded-sm border-stroke-gray mt-3 justify-evenly">
+          <div className="bg-white/5 w-full flex items-center justify-center rounded-l-sm py-1">
+            <Refresh />
+          </div>
+          <div className="bg-white/5 w-full flex items-center border-l-1 border-stroke-gray py-1 justify-center rounded-r-sm">
+            <ModelStatus />
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-3">
         {sidebarLinks.map(({ label, pathname, image }) => {
           const isActive = location.pathname === pathname;
           return (

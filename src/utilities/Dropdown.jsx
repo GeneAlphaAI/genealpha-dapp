@@ -53,7 +53,7 @@ const Dropdown = ({
       <DropdownMenu.Trigger asChild>
         <button
           ref={triggerRef}
-          className={`flex items-center justify-between shadow-lg px-3 py-2 h-[2rem] focus:outline-none transition-all ${
+          className={`flex items-center justify-between shadow-lg px-3 py-2 h-full min-h-[2.2rem] focus:outline-none transition-all ${
             open ? "rounded-t-sm" : "rounded-sm"
           } ${triggerClassName}`}
         >
