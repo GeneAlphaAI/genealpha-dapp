@@ -1,0 +1,65 @@
+@import "tailwindcss";
+@import "./App.css";
+
+html,
+body {
+  background-color: #0a0a0b;
+}
+
+@theme {
+  --font-inter: "Inter", sans-serif;
+  --font-jetbrains-mono: "JetBrains Mono", monospace;
+  --breakpoint-3xl: 120rem;
+  --breakpoint-1xl: 1070px;
+  --rounded-sm: 5px;
+  --text-xl: 42px;
+  --text-lg: 36px;
+  --text-md: 22px;
+  --text-sm: 16px;
+  --text-xs: 14px;
+  --text-xxs: 12px;
+  --color-primary: #040404;
+  --color-primary-text: #f9f9f9;
+  --color-secondary-text: #c0c0c0;
+  --color-stroke-gray: #242424;
+  --color-inactive-text: #97979c;
+  --color-dull-white: #bababd;
+  --color-yellow: #d4cd44;
+  --color-dull-gray: #686870;
+  --color-grayish-white: #f9f9f9;
+  --color-main-background: #040404;
+  --color-low-opacity: #97979c;
+  --color-medium-opacity: #BABABD;
+  --color-table-head: #090909;
+}
+
+/* styles.css or a module file */
+.white-gradient {
+  background: linear-gradient(90deg, #cacaca 0%, #e9e9e9 40.87%, #d3d3d3 100%);
+}
+
+@keyframes progress {
+  from {
+    stroke-dashoffset: 94.2; /* full circumference */
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+* {
+  /* Custom minimal thin scrollbar for PredictionTable */
+  scrollbar-width: thin;
+  scrollbar-color: #232323 #111111; /* thumb color, track color */
+  ::-webkit-scrollbar {
+    width: 42px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #232323;
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #111111;
+    border-radius: 6px;
+  }
+}
