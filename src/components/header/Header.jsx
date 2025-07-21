@@ -5,14 +5,12 @@ import ModelStatus from "./ModelStatus";
 import Balance from "./Balance";
 import WalletAddress from "./WalletAddress";
 import ProfileDropdown from "../../utilities/ProfileDropdown";
+import { useDispatch, useSelector } from "react-redux";
+import { selectToken } from "../../store/slices/token";
 
 const Header = ({ onHamburgerClick, isDrawerOpen, onCloseDrawer }) => {
-  const options = [
-    { label: "Ethereum", value: "eth" },
-    { label: "Polygon", value: "polygon" },
-    { label: "BNB", value: "bnb" },
-  ];
-
+  const { options, selectedToken } = useSelector((state) => state.token);
+  const dispatch = useDispatch();
   return (
     <div className="sticky top-0 z-50 bg-dark-gray p-4 flex items-center gap-2 border-b-1 border-stroke-gray">
       <div className="flex items-center gap-2 md:min-w-[180px] 2xl:min-w-[250px]">
@@ -28,12 +26,14 @@ const Header = ({ onHamburgerClick, isDrawerOpen, onCloseDrawer }) => {
         <div className="hidden 1xl:block">
           <Dropdown
             options={options}
+            selectedValue={selectedToken}
+            onSelect={(value) => dispatch(selectToken(value))}
             holderText="Show Predictions: "
             icon="/assets/dashboard/DownArrow.svg"
             position="left"
-            triggerClassName="bg-white/10 w-[240px] gap-2 text-xs"
+            triggerClassName="bg-[#222121]/50 w-[240px] gap-2 text-xs"
             labelClassName="text-dull-white"
-            contentClassName="bg-white/10 backdrop-blur-lg text-xs"
+            contentClassName="bg-[#222121]/50 backdrop-blur-lg text-xs"
           />
         </div>
 
@@ -43,11 +43,10 @@ const Header = ({ onHamburgerClick, isDrawerOpen, onCloseDrawer }) => {
           <Balance />
 
           <ProfileDropdown
-            icon="/assets/dashboard/DownArrow.svg"
             position="left"
-            triggerClassName="bg-white/10 backdrop-blur-lg gap-2 border-stroke-gray text-xs"
+            triggerClassName="bg-white/7 backdrop-blur-lg gap-2 border-stroke-gray text-xs"
             labelClassName="text-dull-white"
-            contentClassName="bg-white/10 backdrop-blur-lg border-1 border-stroke-gray text-xs"
+            contentClassName="bg-white/7 backdrop-blur-lg border-1 border-stroke-gray text-xs"
           />
         </div>
 

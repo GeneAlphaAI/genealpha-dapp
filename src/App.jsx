@@ -43,7 +43,7 @@ function App() {
         </div>
       </div>
 
-      <Popup>
+      {/* <Popup>
         <button
           className="absolute right-4 top-4 md:right-8 md:top-8 flex items-center gap-[8px] bg-white/4 rounded-[3px] px-[10px] py-[4px] w-max h-[24px] transition-all ease-in hover:bg-white/5 cursor-pointer"
           onClick={() => {
@@ -95,7 +95,7 @@ function App() {
             </LinkButton>
           </div>
         </div>
-      </Popup>
+      </Popup> */}
     </div>
   );
 }

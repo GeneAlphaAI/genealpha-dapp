@@ -72,11 +72,13 @@ const ModelCard = ({
         <p className={descriptionTextSize}>{description}</p>
       </div>
       <div className="space-y-4 w-full">
-        <FrameSelector
-          frames={FRAMES}
-          selectedFrame={frame}
-          onChange={handleFrameChange}
-        />
+        <div onClick={(e) => e.stopPropagation()}>
+          <FrameSelector
+            frames={FRAMES}
+            selectedFrame={frame}
+            onChange={handleFrameChange}
+          />
+        </div>
 
         <FrameProgress progress={progress} timeLeft={timeLeft} />
         <div className="flex justify-between">

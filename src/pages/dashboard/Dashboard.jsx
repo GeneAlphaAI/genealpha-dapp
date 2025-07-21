@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ModelCard from "../../components/dashboard/ModelCard";
 import Popup from "../../components/Popups/Popup";
 import HistoricalPredictionCard from "../../components/dashboard/HistoricalPredictionCard";
 import WaveGraph from "../../components/Graph/WaveGraph";
+import Loader from "../../components/loaders/Loader";
+import { GetPredictions } from "../../services/apiFunctions";
+import { useSelector } from "react-redux";
 const modelData = [
   {
     title: "LightGBM",
@@ -38,55 +41,76 @@ const modelData = [
 
 const Dashboard = () => {
   const [selectedModel, setSelectedModel] = useState(null);
-
+  const [isLoading, setIsLoading] = useState(false);
   const handleCardClick = (model) => {
     setSelectedModel(model);
   };
-
+  const [liveModels, setLiveModels] = useState([]);
+  const { selectedToken } = useSelector((state) => state.token);
+  console.log(selectedToken);
   const handleClosePopup = () => {
     setSelectedModel(null);
   };
 
-  return (
-    <div className="flex flex-wrap gap-4">
-      {modelData.map((model) => (
-        <ModelCard
-          key={model.title}
-          title={model.title}
-          description={model.description}
-          onClick={() => handleCardClick(model)}
-        />
-      ))}
+  const GetLiveModels = async () => {
+    setIsLoading(true);
+    const models = await GetPredictions(selectedToken);
+    setLiveModels(models);
+    setIsLoading(false);
+  };
 
-      {selectedModel && (
-        <Popup onClose={handleClosePopup}>
-          <button
-            className="absolute top-[10px] right-[10px] md:top-[15px] md:right-[15px]"
-            onClick={handleClosePopup}
-            aria-label="Close"
-          >
-            <img
-              src="/assets/general/close-button.svg"
-              alt="close"
-              className="size-[24px] aspect-square"
-            />
-          </button>
-          <div className="flex flex-col md:flex-row items-stretch gap-4 lg:gap-[30px] 3xl:gap-5">
+  useEffect(() => {
+    GetLiveModels();
+  }, [selectedToken]);
+
+  return (
+    <>
+      {isLoading ? (
+        <div className="flex w-full h-full items-center justify-center">
+          <Loader />
+        </div>
+      ) : (
+        <div className="flex flex-wrap gap-4">
+          {modelData.map((model) => (
             <ModelCard
-              title={selectedModel.title}
-              description={selectedModel.description}
-              titleTextSize="text-[18px] lg:text-md font-medium text-primary-text"
-              descriptionTextSize="text-dull-white text-xxs lg:text-xs font-medium"
-              className="items-start w-full max-w-full md:max-w-[400px] xl:max-w-[500px] px-4 lg:px-6 py-2 lg:py-4"
+              key={model.title}
+              title={model.title}
+              description={model.description}
+              onClick={() => handleCardClick(model)}
             />
-            <HistoricalPredictionCard />
-          </div>
-          <div className="mt-4 lg:mt-[30px] 3xl:mt-5">
-            <WaveGraph />
-          </div>
-        </Popup>
+          ))}
+
+          {selectedModel && (
+            <Popup onClose={handleClosePopup}>
+              <button
+                className="absolute top-[10px] right-[10px] md:top-[15px] md:right-[15px]"
+                onClick={handleClosePopup}
+                aria-label="Close"
+              >
+                <img
+                  src="/assets/general/close-button.svg"
+                  alt="close"
+                  className="size-[24px] aspect-square"
+                />
+              </button>
+              <div className="flex flex-col md:flex-row items-stretch gap-4 lg:gap-[30px] 3xl:gap-5">
+                <ModelCard
+                  title={selectedModel.title}
+                  description={selectedModel.description}
+                  titleTextSize="text-[18px] lg:text-md font-medium text-primary-text"
+                  descriptionTextSize="text-dull-white text-xxs lg:text-xs font-medium"
+                  className="items-start w-full max-w-full md:max-w-[400px] xl:max-w-[500px] px-4 lg:px-6 py-2 lg:py-4"
+                />
+                <HistoricalPredictionCard />
+              </div>
+              <div className="mt-4 lg:mt-[30px] 3xl:mt-5">
+                <WaveGraph />
+              </div>
+            </Popup>
+          )}
+        </div>
       )}
-    </div>
+    </>
   );
 };
 
