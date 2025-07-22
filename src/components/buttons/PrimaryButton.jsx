@@ -3,9 +3,9 @@ import React from "react";
 const PrimaryButton = ({
   children,
   onClick,
-  className = "",
-  textClassName = "font-regular 3xl:text-[0.9dvw] text-primary",
-  textSize = "sm:text-sm",
+  className = "h-[2.2rem]",
+  textClassName = "font-regular 3xl:text-[0.7dvw] text-primary",
+  textSize = "text-xs",
   mobilePadding = "px-3 py-1",
   defaultPadding = "px-5 py-1",
   roundedStyle = "rounded-sm",

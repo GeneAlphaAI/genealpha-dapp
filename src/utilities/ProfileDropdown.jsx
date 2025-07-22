@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import ModelStatus from "../components/header/ModelStatus";
-import Refresh from "../components/header/Refresh";
 import { truncateMiddle } from "./helpers";
+import { useAccount, useDisconnect } from "wagmi";
 
 const ProfileDropdown = ({
   onSelect,
@@ -17,6 +16,8 @@ const ProfileDropdown = ({
   icon = "/icons/universal/down-arrow.svg",
   holderText = "",
 }) => {
+  const { address } = useAccount();
+  const { disconnect } = useDisconnect();
   const triggerRef = useRef(null);
   const [triggerWidth, setTriggerWidth] = useState(null);
 
@@ -34,10 +35,10 @@ const ProfileDropdown = ({
       <DropdownMenu.Trigger asChild>
         <button
           ref={triggerRef}
-          className={`flex items-center justify-center px-3 py-2 h-[2rem] w-[140px] rounded-sm focus:outline-none ${triggerClassName}`}
+          className={`flex items-center justify-center px-3 py-2 h-[2.2rem] w-[140px] rounded-sm focus:outline-none ${triggerClassName}`}
         >
           <span className={`text-start ${labelClassName}`}>
-            {truncateMiddle("0xb8db5B8A8445d033870119a5c40cE95B485A5e40", 13)}
+            {truncateMiddle(address, 13)}
           </span>
           {/* <img
             src={icon}
@@ -63,16 +64,20 @@ const ProfileDropdown = ({
           </DropdownMenu.Item> */}
 
           <DropdownMenu.Item
-            // key={option.value}
-            // onSelect={() => handleSelect(option.value, option.label)}
-            className={` w-full flex item-center justify-center rounded-b-sm py-2  text-white outline-0 transition-color hover:bg-white/15 cursor-pointer flex items-center gap-2`}
+          // key={option.value}
+          // onSelect={() => handleSelect(option.value, option.label)}
           >
-            <img
-              src={"/assets/dashboard/Disconnect.svg"}
-              alt="Dropdown Icon"
-              className={`size-[12px] ${iconClassName}`}
-            />
-            Disconnect
+            <button
+              onClick={() => disconnect()}
+              className={` w-full flex item-center justify-center rounded-b-sm py-2  text-white outline-0 transition-color hover:bg-white/15 cursor-pointer flex items-center gap-2`}
+            >
+              <img
+                src={"/assets/dashboard/Disconnect.svg"}
+                alt="Dropdown Icon"
+                className={`size-[12px] ${iconClassName}`}
+              />
+              Disconnect
+            </button>
           </DropdownMenu.Item>
         </DropdownMenu.Content>
       </DropdownMenu.Portal>

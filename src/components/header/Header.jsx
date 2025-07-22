@@ -7,6 +7,7 @@ import WalletAddress from "./WalletAddress";
 import ProfileDropdown from "../../utilities/ProfileDropdown";
 import { useDispatch, useSelector } from "react-redux";
 import { selectToken } from "../../store/slices/token";
+import ConnectButton from "../connect/ConnectButton";
 
 const Header = ({ onHamburgerClick, isDrawerOpen, onCloseDrawer }) => {
   const { options, selectedToken } = useSelector((state) => state.token);
@@ -42,23 +43,12 @@ const Header = ({ onHamburgerClick, isDrawerOpen, onCloseDrawer }) => {
           <ModelStatus />
           <Balance />
 
-          <ProfileDropdown
-            position="left"
-            triggerClassName="bg-white/7 backdrop-blur-lg gap-2 border-stroke-gray text-xs"
-            labelClassName="text-dull-white"
-            contentClassName="bg-white/7 backdrop-blur-lg border-1 border-stroke-gray text-xs"
-          />
+          <ConnectButton />
         </div>
 
         <div className="flex 1xl:hidden items-center gap-4">
           <div className="block lg:hidden">
-            <ProfileDropdown
-              icon="/assets/dashboard/DownArrow.svg"
-              position="left"
-              triggerClassName="bg-white/10 backdrop-blur-lg gap-2 border-stroke-gray text-xs"
-              labelClassName="text-dull-white"
-              contentClassName="bg-white/10 backdrop-blur-lg border-1 border-stroke-gray text-xs"
-            />
+            <ConnectButton />
           </div>
 
           {/* Animated Menu/Close Button */}
