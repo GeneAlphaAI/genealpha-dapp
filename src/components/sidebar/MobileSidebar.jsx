@@ -2,7 +2,6 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import Dropdown from "../../utilities/Dropdown";
 import Refresh from "../header/Refresh";
-import Balance from "../header/Balance";
 import ModelStatus from "../header/ModelStatus";
 import { useDispatch, useSelector } from "react-redux";
 import { selectToken } from "../../store/slices/token";
@@ -15,21 +14,25 @@ const MobileSidebar = ({ isOpen }) => {
       label: "Live Models",
       pathname: "/",
       image: "/assets/sidebar/Brain.svg",
+      disabled: false,
     },
     {
       label: "Leaderboard",
       pathname: "/leaderboard",
       image: "/assets/sidebar/Trophy.svg",
+      disabled: true,
     },
     {
       label: "Breeding",
       pathname: "/breeding",
       image: "/assets/sidebar/Dna.svg",
+      disabled: true, // Example disabled
     },
     {
       label: "SwarmDAO",
       pathname: "/swarm",
       image: "/assets/sidebar/Bee.svg",
+      disabled: true,
     },
   ];
 
@@ -48,6 +51,7 @@ const MobileSidebar = ({ isOpen }) => {
         </h3>
         <p className="text-lg font-jetbrains-mono">0</p>
       </div>
+
       <div className="border-b-[0.5px] border-stroke-gray pb-4">
         <Dropdown
           options={options}
@@ -71,16 +75,27 @@ const MobileSidebar = ({ isOpen }) => {
       </div>
 
       <div className="mt-3">
-        {sidebarLinks.map(({ label, pathname, image }) => {
+        {sidebarLinks.map(({ label, pathname, image, disabled }) => {
           const isActive = location.pathname === pathname;
+
+          const baseClasses = `flex items-center gap-3 px-3 py-2 rounded-lg transition ${
+            isActive ? "bg-white/10 text-white" : "text-dull-white"
+          }`;
+
+          const disabledClasses =
+            "opacity-50 cursor-not-allowed text-low-opacity";
+
+          if (disabled) {
+            return (
+              <div key={label} className={`${baseClasses} ${disabledClasses}`}>
+                <img src={image} alt={label} className="w-5 h-5" />
+                <span className="text-sm">{label}</span>
+              </div>
+            );
+          }
+
           return (
-            <Link
-              key={label}
-              to={pathname}
-              className={`flex items-center gap-3 px-3 py-2 rounded-lg transition ${
-                isActive ? "bg-white/10 text-white" : "text-dull-white"
-              }`}
-            >
+            <Link key={label} to={pathname} className={baseClasses}>
               <img src={image} alt={label} className="w-5 h-5" />
               <span className="text-sm">{label}</span>
             </Link>
