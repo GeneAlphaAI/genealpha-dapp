@@ -17,6 +17,9 @@ const ModelCard = ({
   description,
   badge,
   onClick,
+  predictedPrice,
+  currentPrice,
+  error,
   className = "w-full h-full md:h-[400px] xl:max-w-[500px] 2xl:min-w-[450px] 2xl:max-w-[450px] justify-between px-6 py-4",
   titleTextSize = "text-md font-medium",
   descriptionTextSize = "text-dull-white text-sm font-medium",
@@ -54,7 +57,7 @@ const ModelCard = ({
     setStartTime(Date.now());
   };
   const width = window.innerWidth;
-  console.log(width);
+
   return (
     <div
       className={`bg-white/2 border-1 space-y-3 border-stroke-gray rounded-[10px]  flex flex-col  cursor-pointer ${className}`}
@@ -85,16 +88,16 @@ const ModelCard = ({
           {" "}
           <ModelInfo
             title={window.innerWidth < 600 ? "Predicted" : "Predicted Price"}
-            value={`$2657.36`}
+            value={`$${predictedPrice || 0}`}
           />
           <ModelInfo
             title={"Error"}
-            value={`0.31%`}
+            value={`${error}%`}
             valueClassName="text-sm md:text-[20px]"
           />
           <ModelInfo
             title={window.innerWidth < 600 ? "Current" : "Current Price"}
-            value={`$2645.50`}
+            value={`$${currentPrice || 0}`}
             infoClassName="items-end"
           />
         </div>

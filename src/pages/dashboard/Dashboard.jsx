@@ -4,39 +4,42 @@ import Popup from "../../components/Popups/Popup";
 import HistoricalPredictionCard from "../../components/dashboard/HistoricalPredictionCard";
 import WaveGraph from "../../components/Graph/WaveGraph";
 import Loader from "../../components/loaders/Loader";
-import { GetPredictions } from "../../services/apiFunctions";
+import { GetEthPrice, GetPredictions } from "../../services/apiFunctions";
 import { useSelector } from "react-redux";
+import { formatPrice } from "../../utilities/helpers";
 const modelData = [
   {
     title: "LightGBM",
+    key: "lightgbm",
     description:
       "Lightning-fast gradient boosting trees, handling categorical features and large datasets effortlessly well.",
   },
   {
-    title: "XGBoost",
-    description:
-      "Battle-tested boosting algorithm delivering consistent accuracy on structured tabular data and time-series.",
-  },
-  {
     title: "Random Forest",
+    key: "random_forest",
     description:
       "Ensemble of decision trees averaging predictions, reducing variance and guarding against overfitting.",
   },
-  {
-    title: "Prophet",
-    description:
-      "Facebook’s additive model capturing seasonality, holidays, trend shifts with interpretable forecast components.",
-  },
-  {
-    title: "ARIMA",
-    description:
-      "Classical statistical model integrating autoregression and moving averages for mean-reverting price signals.",
-  },
-  {
-    title: "TFT",
-    description:
-      "Attention-based architecture combining static, known, and observed features for interpretable probabilistic forecasts.",
-  },
+  // {
+  //   title: "XGBoost",
+  //   description:
+  //     "Battle-tested boosting algorithm delivering consistent accuracy on structured tabular data and time-series.",
+  // },
+  // {
+  //   title: "Prophet",
+  //   description:
+  //     "Facebook’s additive model capturing seasonality, holidays, trend shifts with interpretable forecast components.",
+  // },
+  // {
+  //   title: "ARIMA",
+  //   description:
+  //     "Classical statistical model integrating autoregression and moving averages for mean-reverting price signals.",
+  // },
+  // {
+  //   title: "TFT",
+  //   description:
+  //     "Attention-based architecture combining static, known, and observed features for interpretable probabilistic forecasts.",
+  // },
 ];
 
 const Dashboard = () => {
@@ -45,24 +48,64 @@ const Dashboard = () => {
   const handleCardClick = (model) => {
     setSelectedModel(model);
   };
-  const [liveModels, setLiveModels] = useState([]);
+  const [liveModels, setLiveModels] = useState(null);
   const { selectedToken } = useSelector((state) => state.token);
-  console.log(selectedToken);
+
   const handleClosePopup = () => {
     setSelectedModel(null);
   };
 
   const GetLiveModels = async () => {
+    console.log("I am called");
     setIsLoading(true);
-    const models = await GetPredictions(selectedToken);
-    setLiveModels(models);
-    setIsLoading(false);
+    try {
+      const res = await GetPredictions(selectedToken);
+      const predictions = res?.predicted_price_next_hour || {};
+
+      const price = await GetEthPrice(
+        "0xa93d86Af16fe83F064E3C0e2F3d129F7B7b002b0"
+      );
+
+      const transformedModels = modelData
+        .map((model) => {
+          if (predictions.hasOwnProperty(model.key) && price?.price) {
+            const predicted = Number(predictions[model.key]);
+            const actual = price.price;
+            const error = Math.abs((predicted - actual) / actual) * 100; // Error percentage
+
+            return {
+              title: model.title,
+              description: model.description,
+              predictedPrice: formatPrice(predicted),
+              currentPrice: actual,
+              error: error.toFixed(2), // Keep 2 decimal places
+            };
+          }
+          return null;
+        })
+        .filter(Boolean);
+
+      setLiveModels({
+        token: res?.token,
+        timestamp: res?.timestamp,
+        models: transformedModels,
+      });
+      console.log(liveModels, "here");
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
+    }
   };
 
   useEffect(() => {
-    GetLiveModels();
+    if (selectedToken) {
+      GetLiveModels();
+    }
   }, [selectedToken]);
-
+  console.log(liveModels);
   return (
     <>
       {isLoading ? (
@@ -71,11 +114,14 @@ const Dashboard = () => {
         </div>
       ) : (
         <div className="flex flex-wrap gap-4">
-          {modelData.map((model) => (
+          {liveModels?.models.map((model) => (
             <ModelCard
               key={model.title}
               title={model.title}
               description={model.description}
+              currentPrice={model?.currentPrice}
+              predictedPrice={model?.predictedPrice}
+              error={model?.error}
               onClick={() => handleCardClick(model)}
             />
           ))}
@@ -97,6 +143,9 @@ const Dashboard = () => {
                 <ModelCard
                   title={selectedModel.title}
                   description={selectedModel.description}
+                  currentPrice={selectedModel.currentPrice}
+                  predictedPrice={selectedModel.predictedPrice}
+                  error={selectedModel.error}
                   titleTextSize="text-[18px] lg:text-md font-medium text-primary-text"
                   descriptionTextSize="text-dull-white text-xxs lg:text-xs font-medium"
                   className="items-start w-full max-w-full md:max-w-[400px] xl:max-w-[500px] px-4 lg:px-6 py-2 lg:py-4"

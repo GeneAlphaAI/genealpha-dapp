@@ -18,3 +18,15 @@ export function truncateMiddle(text, maxLength) {
   const half = Math.floor(maxLength / 2);
   return `${text?.slice(0, half)}...${text?.slice(-half)}`;
 }
+
+export const formatPrice = (price) => {
+  if (!price || isNaN(price)) return 0;
+
+  const num = Number(price);
+
+  if (num < 1) {
+    return Number(num.toPrecision(3));
+  } else {
+    return Number(num.toFixed(3));
+  }
+};
