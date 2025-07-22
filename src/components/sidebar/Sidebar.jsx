@@ -6,22 +6,22 @@ const Sidebar = () => {
     {
       label: "Live Models",
       pathname: "/",
-      image: "/assets/sidebar/LiveModels.svg",
+      image: "/assets/sidebar/Brain.svg",
     },
     {
       label: "Leaderboard",
       pathname: "/leaderboard",
-      image: "/assets/sidebar/Breeding.svg",
+      image: "/assets/sidebar/Trophy.svg",
     },
     {
       label: "Breeding",
       pathname: "/breeding",
-      image: "/assets/sidebar/Breeding.svg",
+      image: "/assets/sidebar/Dna.svg",
     },
     {
       label: "SwarmDAO",
       pathname: "/swarm",
-      image: "/assets/sidebar/Breeding.svg",
+      image: "/assets/sidebar/Bee.svg",
     },
   ];
 
@@ -36,7 +36,7 @@ const Sidebar = () => {
             key={label}
             to={pathname}
             className={`flex items-center gap-3 px-3 py-2 rounded-lg transition ${
-              isActive ? "bg-white/10 text-white" : "text-dull-white"
+              isActive ? "bg-white/7 text-white" : "text-dull-white"
             }`}
           >
             <img src={image} alt={label} className="w-5 h-5" />

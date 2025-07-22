@@ -4,6 +4,8 @@ import Dropdown from "../../utilities/Dropdown";
 import Refresh from "../header/Refresh";
 import Balance from "../header/Balance";
 import ModelStatus from "../header/ModelStatus";
+import { useDispatch, useSelector } from "react-redux";
+import { selectToken } from "../../store/slices/token";
 
 const MobileSidebar = ({ isOpen }) => {
   const location = useLocation();
@@ -31,11 +33,8 @@ const MobileSidebar = ({ isOpen }) => {
     },
   ];
 
-  const options = [
-    { label: "Ethereum", value: "eth" },
-    { label: "Polygon", value: "polygon" },
-    { label: "BNB", value: "bnb" },
-  ];
+  const { options, selectedToken } = useSelector((state) => state.token);
+  const dispatch = useDispatch();
 
   return (
     <div
@@ -52,12 +51,14 @@ const MobileSidebar = ({ isOpen }) => {
       <div className="border-b-[0.5px] border-stroke-gray pb-4">
         <Dropdown
           options={options}
+          selectedValue={selectedToken}
+          onSelect={(value) => dispatch(selectToken(value))}
           holderText="Show Predictions: "
           icon="/assets/dashboard/DownArrow.svg"
           position="left"
-          triggerClassName="bg-white/10 gap-2 w-full text-xs"
+          triggerClassName="bg-[#222121] gap-2 w-full text-xs"
           labelClassName="text-dull-white"
-          contentClassName="bg-white/10 backdrop-blur-lg text-xs"
+          contentClassName="bg-[#222121] backdrop-blur-lg text-xs"
         />
         <div className="flex lg:hidden w-full border-1 rounded-sm border-stroke-gray mt-3 justify-evenly">
           <div className="bg-white/5 w-full flex items-center justify-center rounded-l-sm py-1">

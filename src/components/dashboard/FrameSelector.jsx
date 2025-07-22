@@ -11,8 +11,8 @@ const FrameSelector = ({ frames, selectedFrame, onChange }) => {
           <button
             key={label}
             onClick={() => onChange(label)}
-            className={`text-xs py-1 rounded-full uppercase font-jetbrains-mono ${
-              selectedFrame === label ? "text-white" : "text-dull-gray"
+            className={`text-xs py-1 cursor-pointer hover:text-white/70 rounded-full uppercase font-jetbrains-mono ${
+              selectedFrame === label ? "text-dull-white" : "text-dull-gray"
             }`}
           >
             {label}

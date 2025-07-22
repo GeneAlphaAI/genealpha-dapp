@@ -5,6 +5,7 @@ const Dropdown = ({
   options = [],
   onSelect,
   position = "right",
+  selectedValue, // 👈 comes from redux
   defaultLabel,
   triggerClassName = "",
   labelClassName = "",
@@ -17,43 +18,43 @@ const Dropdown = ({
 }) => {
   const triggerRef = useRef(null);
   const [triggerWidth, setTriggerWidth] = useState(null);
+  const [open, setOpen] = useState(false);
 
-  const initialLabel = defaultLabel || options[0]?.label || "Select";
-  const [selectedLabel, setSelectedLabel] = useState(initialLabel);
+  const selectedLabel =
+    options.find((opt) => opt.value === selectedValue)?.label ||
+    defaultLabel ||
+    options[0]?.label ||
+    "Select";
 
-  // Auto-select first item if no defaultLabel was passed
+  // Auto-select first option if selectedValue is undefined/null
   useEffect(() => {
-    if (!defaultLabel && options.length > 0) {
-      setSelectedLabel(options[0].label);
+    if (!selectedValue && options.length > 0) {
       onSelect?.(options[0].value);
     }
-  }, [defaultLabel, options, onSelect]);
+  }, [selectedValue, options, onSelect]);
 
-  // Measure trigger width
+  const handleSelect = useCallback(
+    (value) => {
+      onSelect?.(value);
+      setOpen(false);
+    },
+    [onSelect]
+  );
+
   useEffect(() => {
     if (triggerRef.current) {
       setTriggerWidth(triggerRef.current.offsetWidth);
     }
   }, [selectedLabel, triggerClassName, labelClassName]);
 
-  const handleSelect = useCallback(
-    (value, label) => {
-      setSelectedLabel(label);
-      onSelect?.(value);
-    },
-    [onSelect]
-  );
-
   const getAlignPosition = () => (position === "left" ? "start" : "end");
-
-  const [open, setOpen] = useState(false);
 
   return (
     <DropdownMenu.Root open={open} onOpenChange={setOpen}>
       <DropdownMenu.Trigger asChild>
         <button
           ref={triggerRef}
-          className={`flex items-center justify-between shadow-lg px-3 py-2 h-full min-h-[2.2rem] focus:outline-none transition-all ${
+          className={`flex items-center justify-between px-3 py-2 h-full min-h-[2.2rem] focus:outline-none transition-all ${
             open ? "rounded-t-sm" : "rounded-sm"
           } ${triggerClassName}`}
         >
@@ -80,9 +81,9 @@ const Dropdown = ({
           {options.map((option) => (
             <DropdownMenu.Item
               key={option.value}
-              onSelect={() => handleSelect(option.value, option.label)}
-              className={`px-2 py-1 text-white outline-0 hover:bg-white/15 transition-colors cursor-pointer rounded-sm ${
-                selectedLabel === option.label
+              onSelect={() => handleSelect(option.value)}
+              className={`px-2 py-1 text-white outline-0 hover:bg-white/10 transition-colors cursor-pointer rounded-sm ${
+                selectedValue === option.value
                   ? selectedItemClassName
                   : itemClassName
               }`}
