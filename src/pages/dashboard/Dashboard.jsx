@@ -127,7 +127,7 @@ const Dashboard = () => {
       </div>
     );
   }
-  if (Number((Number(balance) / 10 ** 18).toFixed(3)) > 25000) {
+  if (Number((Number(balance) / 10 ** 18).toFixed(3)) < 25000) {
     return (
       <div className="flex w-full h-full items-center justify-center">
         <h1 className="text-inactive-text">
