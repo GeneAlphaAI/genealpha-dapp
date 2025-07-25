@@ -14,7 +14,7 @@ const ConnectButton = () => {
     open();
   };
   useEffect(() => {
-    if (connecting && isConnected && address) {
+    if (connecting && !isConnected && address) {
       handleLogin();
     }
   }, [connecting, isConnected, address]);
