@@ -22,11 +22,12 @@ const modelData = [
     description:
       "Ensemble of decision trees averaging predictions, reducing variance and guarding against overfitting.",
   },
-  // {
-  //   title: "XGBoost",
-  //   description:
-  //     "Battle-tested boosting algorithm delivering consistent accuracy on structured tabular data and time-series.",
-  // },
+  {
+    title: "Ensemble",
+    key: "ensemble",
+    description:
+      "Weighted ensemble combining LightGBM and RF predictions using optimal GA-derived weights for accuracy.",
+  },
   // {
   //   title: "Prophet",
   //   description:
