@@ -11,6 +11,7 @@ import Popup from "./components/Popups/Popup";
 import HourGlassAnimation from "./components/Animations/HourGlassAnimation";
 import PrimaryButton from "./components/buttons/PrimaryButton";
 import LinkButton from "./components/buttons/LinkButton";
+import InfluencerAgent from "./pages/influencer/InfluencerAgent";
 
 function App() {
   const location = useLocation();
@@ -38,6 +39,7 @@ function App() {
             <Route path="/leaderboard" element={<Leaderboard />} />
             <Route path="/breeding" element={<Breeding />} />
             <Route path="/swarm" element={<SwarmDAO />} />
+            <Route path="/influencer" element={<InfluencerAgent />} />
             <Route path="*" element={<Navigate to={"/"} />} />
           </Routes>
         </div>

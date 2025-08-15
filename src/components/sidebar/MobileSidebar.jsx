@@ -34,6 +34,18 @@ const MobileSidebar = ({ isOpen }) => {
       image: "/assets/sidebar/Bee.svg",
       disabled: true,
     },
+    {
+      label: "Training",
+      pathname: "/training",
+      image: "/assets/sidebar/Training.svg",
+      disabled: true,
+    },
+    {
+      label: "Infulencer Agent",
+      pathname: "/influencer",
+      image: "/assets/sidebar/InfluencerAgent.svg",
+      disabled: false,
+    },
   ];
 
   const { options, selectedToken } = useSelector((state) => state.token);

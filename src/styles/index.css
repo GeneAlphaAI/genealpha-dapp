@@ -31,6 +31,7 @@ body {
   --color-low-opacity: #97979c;
   --color-medium-opacity: #bababd;
   --color-table-head: #090909;
+  --color-placeholder: #434347;
 }
 
 /* styles.css or a module file */
@@ -113,4 +114,40 @@ body {
   40% {
     transform: scaleX(1);
   }
+}
+
+.custom-thumb::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10px; /* visible SVG width */
+  height: 22px; /* visible SVG height */
+  background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 6 14" xmlns="http://www.w3.org/2000/svg"><rect y="0.5" width="6" height="13" rx="1" fill="%23F9F9F9"/><path d="M1 2C1 1.72386 1.22386 1.5 1.5 1.5H4.5C4.77614 1.5 5 1.72386 5 2V12C5 12.2761 4.77614 12.5 4.5 12.5H1.5C1.22386 12.5 1 12.2761 1 12V2Z" fill="%23F9F9F9"/></svg>')
+    no-repeat center;
+
+  background-size: 10px 22px;
+  border: none;
+  cursor: pointer;
+  margin-top: -3.5px; /* shifts thumb down/up to center over 15px bar */
+}
+
+.custom-thumb::-webkit-slider-runnable-track {
+  height: 15px; /* match your visible tick bar height */
+  background: transparent;
+}
+
+.custom-thumb::-moz-range-thumb {
+  width: 10px; /* visible SVG width */
+  height: 22px; /* visible SVG height */
+  background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 6 14" xmlns="http://www.w3.org/2000/svg"><rect y="0.5" width="6" height="13" rx="1" fill="%23F9F9F9"/><path d="M1 2C1 1.72386 1.22386 1.5 1.5 1.5H4.5C4.77614 1.5 5 1.72386 5 2V12C5 12.2761 4.77614 12.5 4.5 12.5H1.5C1.22386 12.5 1 12.2761 1 12V2Z" fill="%23F9F9F9"/></svg>')
+    no-repeat center;
+
+  background-size: 10px 22px;
+  border: none;
+  cursor: pointer;
+  margin-top: -3.5px; /* shifts thumb down/up to center over 15px bar */
+}
+
+.custom-thumb::-moz-range-track {
+  height: 13px;
+  background: transparent;
 }

@@ -20,6 +20,7 @@
     "axios": "^1.10.0",
     "babel-plugin-transform-import-meta": "^2.3.3",
     "echarts": "^5.6.0",
+    "framer-motion": "^12.23.12",
     "gsap": "^3.13.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
