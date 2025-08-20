@@ -32,6 +32,12 @@ body {
   --color-medium-opacity: #bababd;
   --color-table-head: #090909;
   --color-placeholder: #434347;
+  --color-green-ten-percent: #47bf4b1a;
+  --color-green-twenty-percent: #47bf4b33;
+  --color-light-green: #94ff98;
+  --color-light-orange: #ee9e37;
+  --color-orange-ten-percent: #cc89311a;
+  --color-orange-twenty-percent: #cc893133;
 }
 
 /* styles.css or a module file */
@@ -60,7 +66,7 @@ body {
     border-radius: 4px;
   }
   ::-webkit-scrollbar-track {
-    background: #111111;
+    background: transparent;
     border-radius: 6px;
   }
 }
@@ -150,4 +156,14 @@ body {
 .custom-thumb::-moz-range-track {
   height: 13px;
   background: transparent;
+}
+
+@layer utilities {
+  .no-scrollbar {
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none !important;
+  }
 }
