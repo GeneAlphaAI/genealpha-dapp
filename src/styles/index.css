@@ -166,4 +166,14 @@ body {
   .no-scrollbar::-webkit-scrollbar {
     display: none !important;
   }
+  @keyframes dotBounce {
+    0%,
+    80%,
+    100% {
+      transform: translateY(0);
+    }
+    40% {
+      transform: translateY(-3px);
+    } /* increase this for higher bounce */
+  }
 }

@@ -47,8 +47,8 @@ export default function Stepper({
   };
 
   const handleComplete = () => {
-    setDirection(1);
-    updateStep(totalSteps);
+    // updateStep(totalSteps);
+    onFinalStepCompleted();
   };
 
   return (
@@ -132,7 +132,9 @@ export default function Stepper({
               )}
               <PrimaryButton
                 onClick={isLastStep ? handleComplete : handleNext}
-                className="px-10 h-[2.0rem]"
+                loading={stepsArray[currentStep]?.props.loading}
+                className="px-10 w-[7rem] h-[2.0rem]"
+                disabled={stepsArray[currentStep]?.props.disabled}
                 {...nextButtonProps}
               >
                 {isLastStep ? "Complete" : nextButtonText}
@@ -231,6 +233,6 @@ const stepVariants = {
   }),
 };
 
-export function Step({ children, title }) {
+export function Step({ children, title, disabled, loading }) {
   return <div className="px-4 md:px-8">{children}</div>;
 }

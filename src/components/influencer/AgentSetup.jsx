@@ -1,19 +1,49 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { removeInfluencer, setAgentName } from "../../store/slices/influencer";
+import {
+  removeInfluencer,
+  resetInfluencerState,
+  setAgentName,
+} from "../../store/slices/influencer";
 import Stepper, { Step } from "./Stepper";
 import SectionLabel from "./SectionLabel";
 import ExpandingSearchBar from "./ExpandingSearchbar";
 import InfluenceList from "./InfluenceList";
 import CategorySelector from "./CategorySelector";
 import CommonInput from "../form/CommonInput";
+import { CreateAgent } from "../../services/apiFunctions";
+import { useAccount } from "wagmi";
 
 const AgentSetup = ({ onClose }) => {
   const dispatch = useDispatch();
+  const { address } = useAccount();
   const { selectedInfluencers, agentName, selectedCategories } = useSelector(
     (state) => state.influencer
   );
+  const [loading, setLoading] = useState();
+  const handleSubmit = async () => {
+    setLoading(true);
+    let payload = {
+      walletAddress: address,
+      agentName: agentName,
+      accounts: selectedInfluencers,
+      categories: selectedCategories,
+    };
 
+    try {
+      const response = await CreateAgent(payload);
+      console.log(response);
+      if (response?.status === 200) {
+        onClose();
+        dispatch(resetInfluencerState());
+      } else {
+      }
+    } catch (error) {
+      console.error("Submit Error", error);
+    } finally {
+      setLoading(false);
+    }
+  };
   console.log("Selected Influencers:", selectedCategories);
   return (
     <div className="bg-black/5 backdrop-blur-[12px] fixed top-0 left-0 w-full h-full z-50 flex items-center justify-center">
@@ -22,7 +52,7 @@ const AgentSetup = ({ onClose }) => {
         onStepChange={(step) => {
           console.log(step);
         }}
-        onFinalStepCompleted={() => console.log("All steps completed!")}
+        onFinalStepCompleted={handleSubmit}
         backButtonText="Previous"
         nextButtonText="Next"
         onClose={onClose}
@@ -31,6 +61,7 @@ const AgentSetup = ({ onClose }) => {
         <Step
           title={"Select Influencers"}
           logo="/assets/influencer/SelectInfluencer.svg"
+          disabled={selectedInfluencers?.length == 0 ? true : false}
           description="Select the influencers you want your agent to follow. The agent will monitor their tweets in real time, extracting signals, sentiment, and patterns to fuel predictive insights based on their activity."
         >
           <SectionLabel heading={"Enter X (Twitter) Username"} />
@@ -51,7 +82,7 @@ const AgentSetup = ({ onClose }) => {
                   className="flex items-center text-xs text-primary-text hover:text-primary-text/90 border-stroke-gray border-[0.5px] text-blue-700 px-3 py-1 rounded-full text-sm"
                 >
                   <img
-                    src={influencer.image}
+                    src={influencer.profile_image_url}
                     alt="profile image"
                     className="size-[20px] rounded-full mr-1"
                   />
@@ -99,13 +130,18 @@ const AgentSetup = ({ onClose }) => {
             heading={`Categories to track`}
             description={"Select categories that interest you to track"}
           />
-          <CategorySelector categories={["crypto", "stocks"]} />
+          <CategorySelector
+            categories={["crypto", "stocks"]}
+            defaultCategory={"crypto"}
+          />
         </Step>
 
         {/* Step 3 */}
         <Step
           title={"Deploy"}
           logo="/assets/influencer/Deploy.svg"
+          disabled={agentName.length < 5}
+          loading={loading}
           description="Deploy your agent to start monitoring influencer activity in real time. The agent will process tweets, and will surface relevant market signals as they unfold."
         >
           <SectionLabel heading={"Give your Agent a Name"} />
@@ -113,6 +149,8 @@ const AgentSetup = ({ onClose }) => {
             value={agentName}
             onChange={(val) => dispatch(setAgentName(val))}
             placeholder="Enter agent name"
+            minLength={5}
+            maxLength={20}
           />
           <div className="flex w-full justify-between mt-6 mb-2">
             <SectionLabel
@@ -121,53 +159,53 @@ const AgentSetup = ({ onClose }) => {
             <SectionLabel heading={"Influence"} />
           </div>
           <div className="flex flex-col gap-3">
-            {selectedInfluencers.map((inf) => (
-              <div className="flex items-center w-full justify-between">
-                <div className="flex items-center gap-2">
-                  <img
-                    src={inf.image}
-                    alt={inf.name}
-                    className="size-[30px] rounded-full object-cover"
-                  />
+            {[...selectedInfluencers]
+              .sort((a, b) => b.influence - a.influence)
+              .map((inf) => (
+                <div className="flex items-center w-full justify-between">
+                  <div className="flex items-center gap-2">
+                    <img
+                      src={inf.profile_image_url}
+                      alt={inf.name}
+                      className="size-[30px] rounded-full object-cover"
+                    />
 
-                  <div className="flex flex-col">
-                    <span className="flex text-xs items-center gap-1 font-medium">
-                      {inf.name}
-                      {inf.isVerified && (
-                        <img
-                          src={"/assets/influencer/Verified.svg"}
-                          alt="verified"
-                          className="size-4 rounded-full"
-                        />
-                      )}
-                    </span>
-                    <span className="text-xxs text-low-opacity font-jetbrains-mono font-regular uppercase">
-                      @{inf.username}
+                    <div className="flex flex-col">
+                      <span className="flex text-xs items-center gap-1 font-medium">
+                        {inf.name}
+                        {inf.verified && (
+                          <img
+                            src={"/assets/influencer/Verified.svg"}
+                            alt="verified"
+                            className="size-4 rounded-full"
+                          />
+                        )}
+                      </span>
+                      <span className="text-xxs text-low-opacity font-jetbrains-mono font-regular uppercase">
+                        @{inf.username}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className=" text-xs font-jetbrains-mono text-primary-text">
+                      {inf.influence}%
                     </span>
                   </div>
                 </div>
-
-                <div className="flex items-center gap-2 mb-2">
-                  <span className=" text-xs font-jetbrains-mono text-primary-text">
-                    {inf.influence}%
-                  </span>
-                </div>
-              </div>
-            ))}
+              ))}
           </div>
           <br></br>
           <SectionLabel heading={`Categories selected`} />
           <div className="flex flex-wrap gap-2">
-            {Object.keys(selectedCategories)
-              .filter((category) => selectedCategories[category])
-              .map((category) => (
-                <span
-                  key={category}
-                  className={`px-3 py-1 bg-primary-text text-primary border-white rounded-full cursor-pointer border text-xs font-regular transition-colors`}
-                >
-                  {category}
-                </span>
-              ))}
+            {selectedCategories.map((category) => (
+              <span
+                key={category}
+                className={`px-3 py-1 bg-primary-text text-primary border-white rounded-full cursor-pointer border text-xs font-regular transition-colors`}
+              >
+                {category}
+              </span>
+            ))}
           </div>
         </Step>
       </Stepper>

@@ -17,6 +17,12 @@ const MobileSidebar = ({ isOpen }) => {
       disabled: false,
     },
     {
+      label: "Infulencer Agent",
+      pathname: "/influencer",
+      image: "/assets/sidebar/InfluencerAgent.svg",
+      disabled: false,
+    },
+    {
       label: "Leaderboard",
       pathname: "/leaderboard",
       image: "/assets/sidebar/Trophy.svg",
@@ -39,12 +45,6 @@ const MobileSidebar = ({ isOpen }) => {
       pathname: "/training",
       image: "/assets/sidebar/Training.svg",
       disabled: true,
-    },
-    {
-      label: "Infulencer Agent",
-      pathname: "/influencer",
-      image: "/assets/sidebar/InfluencerAgent.svg",
-      disabled: false,
     },
   ];
 
