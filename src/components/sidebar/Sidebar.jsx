@@ -12,6 +12,12 @@ const Sidebar = () => {
       disabled: false,
     },
     {
+      label: "Infulencer Agent",
+      pathname: "/influencer",
+      image: "/assets/sidebar/InfluencerAgent.svg",
+      disabled: false,
+    },
+    {
       label: "Leaderboard",
       pathname: "/leaderboard",
       image: "/assets/sidebar/Trophy.svg",
@@ -34,12 +40,6 @@ const Sidebar = () => {
       pathname: "/training",
       image: "/assets/sidebar/Training.svg",
       disabled: true,
-    },
-    {
-      label: "Infulencer Agent",
-      pathname: "/influencer",
-      image: "/assets/sidebar/InfluencerAgent.svg",
-      disabled: false,
     },
   ];
 
