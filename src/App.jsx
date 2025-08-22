@@ -12,9 +12,12 @@ import HourGlassAnimation from "./components/Animations/HourGlassAnimation";
 import PrimaryButton from "./components/buttons/PrimaryButton";
 import LinkButton from "./components/buttons/LinkButton";
 import InfluencerAgent from "./pages/influencer/InfluencerAgent";
+import { useAccount } from "wagmi";
+import ConnectWalletPlaceholder from "./components/connect/ConnectWalletPlaceholder";
 
 function App() {
   const location = useLocation();
+  const { isConnected } = useAccount();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   return (
@@ -34,14 +37,20 @@ function App() {
         <MobileSidebar isOpen={isDrawerOpen} />
 
         <div className="p-4 flex-grow overflow-y-auto">
-          <Routes location={location} key={location.pathname}>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/leaderboard" element={<Leaderboard />} />
-            <Route path="/breeding" element={<Breeding />} />
-            <Route path="/swarm" element={<SwarmDAO />} />
-            <Route path="/influencer" element={<InfluencerAgent />} />
-            <Route path="*" element={<Navigate to={"/"} />} />
-          </Routes>
+          {!isConnected ? (
+            <div className="flex w-full h-full items-center justify-center">
+              <ConnectWalletPlaceholder />
+            </div>
+          ) : (
+            <Routes location={location} key={location.pathname}>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/leaderboard" element={<Leaderboard />} />
+              <Route path="/breeding" element={<Breeding />} />
+              <Route path="/swarm" element={<SwarmDAO />} />
+              <Route path="/influencer" element={<InfluencerAgent />} />
+              <Route path="*" element={<Navigate to={"/"} />} />
+            </Routes>
+          )}
         </div>
       </div>
 

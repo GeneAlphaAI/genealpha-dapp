@@ -6,12 +6,13 @@ import Loader from "../../components/loaders/Loader";
 import { GetAgents } from "../../services/apiFunctions";
 import { useAccount } from "wagmi";
 import { addPredictionsToAgents } from "../../utilities/helpers";
+import ConnectWalletPlaceholder from "../../components/connect/ConnectWalletPlaceholder";
 
 const InfluencerAgent = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [agents, setAgents] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { address } = useAccount();
+  const { address, isConnected } = useAccount();
   // 🔹 Fetch agents from API
   const fetchAgents = async () => {
     try {
