@@ -1,6 +1,7 @@
 import axios from "axios";
 const llamaAPI = process.env.DEFI_LLAMA_URL;
 const genealphaAPI = process.env.GENEALPHA_API_URL;
+const genealphaAgentAPI = process.env.GENEALPHA_AGENT_API;
 export async function GetPredictions(token) {
   try {
     if (token) {
@@ -46,5 +47,56 @@ export async function GetEthPrice(address) {
     }
     console.error("Error fetching cryptocurrency data:", error.message);
     return 0;
+  }
+}
+
+export async function SearchInfluencer(username, walletAddress) {
+  try {
+    const influencerResponse = await axios.post(
+      `${genealphaAgentAPI}/influencer/search`,
+      {
+        username,
+        walletAddress,
+      }
+    );
+    console.log(influencerResponse);
+
+    if (influencerResponse.status === 200) {
+      return influencerResponse;
+    }
+  } catch (error) {
+    console.error("Error fetching iinfluencer", error.message);
+    return error?.response;
+  }
+}
+
+export async function CreateAgent(data) {
+  try {
+    const createAgentResponse = await axios.post(
+      `${genealphaAgentAPI}/user/agent/create`,
+      data
+    );
+    console.log(createAgentResponse);
+
+    if (createAgentResponse.status === 200) {
+      return createAgentResponse;
+    }
+  } catch (error) {
+    console.error("Error fetching iinfluencer", error.message);
+    return error?.response;
+  }
+}
+
+export async function GetAgents(walletAddress) {
+  try {
+    const agentsResponse = await axios.get(
+      `${genealphaAgentAPI}/user/agent/get?walletAddress=${walletAddress}`
+    );
+    if (agentsResponse.status === 200) {
+      return agentsResponse;
+    }
+  } catch (error) {
+    console.error("Error fetching iinfluencer", error.message);
+    return error?.response;
   }
 }

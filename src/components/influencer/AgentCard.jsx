@@ -75,7 +75,7 @@ const AgentCard = ({
               {profiles?.map((profile, idx) => (
                 <img
                   key={idx}
-                  src={profile.image}
+                  src={profile?.profile_image_url}
                   alt={profile.name}
                   className="w-5 h-5 rounded-full border-[0.5px] border-stroke-gray object-cover"
                 />
@@ -88,39 +88,39 @@ const AgentCard = ({
 
       {/* Predictions List */}
       {predictions?.length > 0 ? (
-        <div className="flex flex-col gap-2 items-start text-left">
-          <h4 className="text-xs text-low-opacity font-jetbrains-mono uppercase">
+        <div className="flex flex-col gap-2 items-start text-left flex-1 min-h-0">
+          <h4 className="text-xs text-low-opacity font-jetbrains-mono uppercase flex-shrink-0">
             {predictions?.length} Predictions
           </h4>
 
-          <div className="relative w-full">
+          <div className="relative w-full flex-1 min-h-0">
             <div
               ref={scrollRef}
-              className="flex flex-col gap-2 w-full overflow-y-auto max-h-[180px] pr-2"
+              className="flex flex-col gap-2 w-full overflow-y-auto pr-2 h-full"
             >
               {predictions?.map((pred, idx) => (
                 <div
                   key={idx}
                   className={`flex items-start gap-3 p-3 rounded-[5px] border-[0.5px] ${getBgColor(
-                    pred.category
+                    pred.category || "crypto"
                   )}`}
                 >
                   <img
-                    src={pred.influencer.image}
-                    alt={pred.influencer.name}
+                    src={pred.account_info?.profile_image_url}
+                    alt={pred.account_info.name}
                     className="size-10 rounded-full border-[0.5px] border-stroke-gray object-cover flex-shrink-0"
                   />
                   <div className="flex flex-col text-xs w-full">
                     <div className="flex gap-2 items-center">
                       <span className="font-medium uppercase font-jetbrains-mono text-xxs text-medium-opacity">
-                        @{pred.influencer.username}
+                        @{pred.account_info?.username}
                       </span>
                       <span
                         className={`text-xxs uppercase font-jetbrains-mono p-1 px-2 rounded-[5px] ${getBadgeColor(
-                          pred.category
+                          pred.category || "crypto"
                         )}`}
                       >
-                        {pred.category}
+                        {pred.category || "crypto"}
                       </span>
                     </div>
                     <p className="text-primary-text line-clamp-3 mt-1">

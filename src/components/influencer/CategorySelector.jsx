@@ -1,22 +1,44 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedCategories } from "../../store/slices/influencer";
 
-export default function CategorySelector({ categories }) {
+export default function CategorySelector({ categories, defaultCategory }) {
   const dispatch = useDispatch();
   const selectedCategories = useSelector(
     (state) => state.influencer.selectedCategories
   );
 
+  // Ensure one default category is always selected at start
+  useEffect(() => {
+    if (
+      (!selectedCategories || selectedCategories.length === 0) &&
+      categories.length > 0
+    ) {
+      const initial = defaultCategory || categories[0];
+      dispatch(setSelectedCategories([initial]));
+    }
+  }, [categories, defaultCategory, dispatch, selectedCategories]);
+
   const toggleCategory = (category) => {
-    const currentValue = !!selectedCategories[category];
-    dispatch(setSelectedCategories([{ [category]: !currentValue }]));
+    const isSelected = selectedCategories.includes(category);
+
+    // Prevent deselecting the last one
+    if (isSelected && selectedCategories.length === 1) return;
+
+    let updated;
+    if (isSelected) {
+      updated = selectedCategories.filter((c) => c !== category);
+    } else {
+      updated = [...selectedCategories, category];
+    }
+
+    dispatch(setSelectedCategories(updated));
   };
 
   return (
     <div className="flex gap-2 flex-wrap">
       {categories.map((cat) => {
-        const isSelected = !!selectedCategories[cat];
+        const isSelected = selectedCategories.includes(cat);
         return (
           <button
             key={cat}

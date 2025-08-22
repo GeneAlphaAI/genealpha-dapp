@@ -36,11 +36,11 @@ const AgentPopup = ({ onClose, agent }) => {
     let preds = [...agent.predictions];
 
     if (selectedProfile !== "all") {
-      preds = preds.filter((p) => p.influencer?.name === selectedProfile);
+      preds = preds.filter((p) => p.account_info?.username === selectedProfile);
     }
 
     return preds.sort((a, b) =>
-      a.influencer?.name.localeCompare(b.influencer?.name)
+      a.account_info?.name.localeCompare(b.account_info?.username)
     );
   }, [agent?.predictions, selectedProfile]);
 
@@ -50,7 +50,7 @@ const AgentPopup = ({ onClose, agent }) => {
       onClick={handleBackdropClick}
     >
       <div
-        className="bg-main-background border border-white/10 w-full h-screen sm:h-max sm:w-max xl:min-w-[1000px] rounded-[10px] px-5 xl:px-[38px] py-[48px] w-max lg:max-h-[90dvh] lg:h-[90dvh] relative flex flex-col overflow-hidden"
+        className="bg-main-background border border-white/10 w-full h-screen sm:w-max xl:min-w-[1000px] rounded-[10px] px-5 xl:px-[38px] py-[48px] w-max lg:max-h-[90dvh] lg:h-[90dvh] relative flex flex-col overflow-hidden"
         onClick={handleContentClick}
       >
         <div className="absolute top-0 right-0 p-4">
@@ -62,9 +62,9 @@ const AgentPopup = ({ onClose, agent }) => {
           {/* Header */}
           <div className="space-y-2">
             <div className="flex items-center gap-3 mb-2">
-              <h2 className="text-md font-medium">{agent?.agentName}</h2>
+              <h2 className="text-md font-medium">{agent?.agent}</h2>
               <div className="bg-white/4 text-inactive-text px-4 font-medium font-jetbrains-mono text-xs uppercase flex items-center justify-center rounded-[5px] h-max p-1">
-                {agent?.sources?.length} sources
+                {agent?.accounts?.length} sources
               </div>
             </div>
           </div>
@@ -89,7 +89,8 @@ const AgentPopup = ({ onClose, agent }) => {
                 </div>
               </div>
               <p className="text-xs text-primary-text max-w-[80ch]">
-                {agent?.combinedPrediction?.text}
+                {agent?.combinedPrediction?.text ||
+                  " A combined prediction will appear once influencers start discussing similar trends."}
               </p>
             </div>
 
@@ -119,10 +120,10 @@ const AgentPopup = ({ onClose, agent }) => {
                   Sources
                 </h4>
                 <div className="flex flex-wrap gap-2 -space-x-3">
-                  {agent?.sources?.map((src, idx) => (
+                  {agent?.accounts?.map((src, idx) => (
                     <img
                       key={idx}
-                      src={src.image}
+                      src={src.account_info?.profile_image_url}
                       alt={src.name}
                       className="size-8 rounded-full border-[0.5px] border-stroke-gray object-cover"
                     />
@@ -148,10 +149,10 @@ const AgentPopup = ({ onClose, agent }) => {
           </button>
 
           {/* Influencer tabs */}
-          {agent?.sources?.map((src, idx) => (
+          {agent?.accounts?.map((src, idx) => (
             <button
               key={idx}
-              onClick={() => setSelectedProfile(src.name)}
+              onClick={() => setSelectedProfile(src?.account_info?.username)}
               className={`flex items-center justify-center cursor-pointer font-jetbrains-mono uppercase gap-1 px-3 py-1.5 rounded-full text-xxs uppercase font-medium transition ${
                 selectedProfile === src.name
                   ? "bg-white/10 border-[0.5px] border-stroke-gray text-white"
@@ -159,11 +160,11 @@ const AgentPopup = ({ onClose, agent }) => {
               }`}
             >
               <img
-                src={src.image}
-                alt={src.name}
+                src={src.account_info?.profile_image_url}
+                alt={src.account_info?.name}
                 className="w-5 h-5 rounded-full object-cover"
               />
-              <span className="truncate">@{src.username}</span>
+              <span className="truncate">@{src?.account_info?.username}</span>
               {src.isVerified && (
                 <img
                   src={"/assets/influencer/Verified.svg"}
@@ -192,98 +193,105 @@ const AgentPopup = ({ onClose, agent }) => {
                 </tr>
               </thead>
               <tbody className="">
-                {filteredPredictions.map((pred, idx) => (
-                  <tr key={idx} className="align-middle ">
-                    <td className="p-2 text-center align-middle font-jetbrains-mono uppercase text-low-opacity">
-                      <div className="flex flex-col items-start">
-                        {/* Date */}
-                        <span>
-                          {new Date(pred.timestamp).getFullYear()}-
-                          {String(
-                            new Date(pred.timestamp).getMonth() + 1
-                          ).padStart(2, "0")}
-                          -
-                          {String(new Date(pred.timestamp).getDate()).padStart(
-                            2,
-                            "0"
-                          )}
-                        </span>
+                {filteredPredictions.map((pred, idx) => {
+                  let actualPrice = pred?.summary?.current_price
+                    ? `${pred?.summary?.token} price: $${pred?.summary?.current_price}`
+                    : "-";
+                  let accuracy = pred?.summary?.accuracy
+                    ? `${pred?.accuracy || 0 * 100}%`
+                    : "-";
+                  return (
+                    <tr key={idx} className="align-middle ">
+                      <td className="p-2 text-center align-middle font-jetbrains-mono uppercase text-low-opacity">
+                        <div className="flex flex-col items-start">
+                          {/* Date */}
+                          <span>
+                            {new Date(pred.created_at).getFullYear()}-
+                            {String(
+                              new Date(pred.created_at).getMonth() + 1
+                            ).padStart(2, "0")}
+                            -
+                            {String(
+                              new Date(pred.created_at).getDate()
+                            ).padStart(2, "0")}
+                          </span>
 
-                        {/* Time */}
-                        <span className="text-xs text-low-opacity">
-                          {new Date(pred.timestamp).toLocaleTimeString(
-                            undefined,
-                            {
-                              hour: "numeric",
-                              minute: "2-digit",
-                              hour12: true,
-                            }
-                          )}
-                        </span>
-                      </div>
-                    </td>
-
-                    <td className="p-2 text-left align-middle">
-                      <div
-                        className={` flex items-start w-max gap-2`}
-                        onMouseDown={() =>
-                          dispatch(toggleSelectInfluencer(item))
-                        }
-                      >
-                        <img
-                          src={pred.influencer.image}
-                          alt={pred.influencer.name}
-                          className="size-[30px] rounded-full"
-                        />
-                        <div className="flex flex-col">
-                          <span className="flex items-center gap-1 text-xs font-medium">
-                            {pred.influencer.name}
-                            {pred.influencer.isVerified && (
-                              <img
-                                src={"/assets/influencer/Verified.svg"}
-                                alt="verified"
-                                className="size-4 rounded-full"
-                              />
+                          {/* Time */}
+                          <span className="text-xs text-low-opacity">
+                            {new Date(pred.created_at).toLocaleTimeString(
+                              undefined,
+                              {
+                                hour: "numeric",
+                                minute: "2-digit",
+                                hour12: true,
+                              }
                             )}
                           </span>
-                          <span className="text-xxs text-low-opacity font-jetbrains-mono font-regular uppercase">
-                            @{pred.influencer.username}
-                          </span>
                         </div>
-                      </div>
-                    </td>
+                      </td>
 
-                    <td className="p-2 text-left align-middle font-jetbrains-mono min-w-[150px] max-w-[200px] uppercase text-low-opacity">
-                      {pred.assetName} ({pred.assetSymbol})
-                    </td>
+                      <td className="p-2 text-left align-middle">
+                        <div
+                          className={` flex items-start w-max gap-2`}
+                          onMouseDown={() =>
+                            dispatch(toggleSelectInfluencer(item))
+                          }
+                        >
+                          <img
+                            src={pred?.account_info?.profile_image_url}
+                            alt={pred?.account_info?.name}
+                            className="size-[30px] rounded-full"
+                          />
+                          <div className="flex flex-col">
+                            <span className="flex items-center gap-1 text-xs font-medium">
+                              {pred?.account_info?.name}
+                              {pred?.account_info?.verified && (
+                                <img
+                                  src={"/assets/influencer/Verified.svg"}
+                                  alt="verified"
+                                  className="size-4 rounded-full"
+                                />
+                              )}
+                            </span>
+                            <span className="text-xxs text-low-opacity font-jetbrains-mono font-regular uppercase">
+                              @{pred?.account_info?.username}
+                            </span>
+                          </div>
+                        </div>
+                      </td>
 
-                    <td
-                      className={`p-2 text-left align-middle border-[0.5px] min-w-[300px]  text-primary-text ${getPredictionColor(
-                        pred.category
-                      )} rounded-[5px] w-[400px]`}
-                    >
-                      {pred.text}
-                    </td>
+                      <td className="p-2 text-left align-middle font-jetbrains-mono min-w-[150px] max-w-[200px] uppercase text-low-opacity">
+                        {pred?.summary?.token || "-"}
+                      </td>
 
-                    <td className="p-2 text-left text-primary-text font-jetbrains-mono uppercase align-middle min-w-[200px] max-w-[500px]">
-                      {`${pred.assetName} price: $${pred.actualAmount}`}
-                    </td>
-
-                    <td className="p-2 text-center align-middle">
-                      <span>{pred.accuracy * 100}%</span>
-                    </td>
-
-                    <td className="p-2  align-right">
-                      <div
-                        className={`px-2 py-1 text-xxs w-[60px] font-jetbrains-mono uppercase flex justify-center items-center font-medium rounded border ${getBadgeColor(
+                      <td
+                        className={`p-2 text-left align-middle border-[0.5px] min-w-[300px]  text-primary-text ${getPredictionColor(
                           pred.category
-                        )}`}
+                        )} rounded-[5px] w-[400px]`}
                       >
-                        <span>{pred.category}</span>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                        {pred?.summary?.reason}
+                      </td>
+
+                      <td className="p-2 text-left text-primary-text font-jetbrains-mono uppercase align-middle min-w-[200px] max-w-[500px]">
+                        {actualPrice}
+                      </td>
+
+                      <td className="p-2 text-center align-middle">
+                        <span>{accuracy}</span>
+                      </td>
+
+                      <td className="p-2  align-right">
+                        <div
+                          className={`px-2 py-1 text-xxs w-[60px] font-jetbrains-mono uppercase flex justify-center items-center font-medium rounded border ${getBadgeColor(
+                            pred.category
+                          )}`}
+                        >
+                          <span>{pred.category || "crypto"}</span>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

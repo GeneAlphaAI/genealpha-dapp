@@ -25,7 +25,7 @@ export default function InfluenceList() {
             <div className="flex items-end w-full justify-between">
               <div className="flex items-center gap-2">
                 <img
-                  src={inf.image}
+                  src={inf.profile_image_url}
                   alt={inf.name}
                   className="size-[30px] rounded-full object-cover"
                 />
@@ -33,7 +33,7 @@ export default function InfluenceList() {
                 <div className="flex flex-col">
                   <span className="flex text-xs items-center gap-1 font-medium">
                     {inf.name}
-                    {inf.isVerified && (
+                    {inf.verified && (
                       <img
                         src={"/assets/influencer/Verified.svg"}
                         alt="verified"

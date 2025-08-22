@@ -6,8 +6,9 @@ const influencerSlice = createSlice({
   initialState: {
     searchInput: "",
     selectedInfluencers: [],
-    searchResults: [],
-    selectedCategories: {},
+    searchResults: null,
+    selectedCategories: [],
+    agentName: "",
   },
   reducers: {
     setSearchInput: (state, action) => {
@@ -17,12 +18,8 @@ const influencerSlice = createSlice({
       state.searchResults = action.payload;
     },
     setSelectedCategories: (state, action) => {
-      // Action payload example: [{ crypto: true }, { stocks: false }]
-      const updates = action.payload;
-      updates.forEach((item) => {
-        const [key, value] = Object.entries(item)[0];
-        state.selectedCategories[key] = value;
-      });
+      // Action payload example: ["crypto", "stocks"]
+      state.selectedCategories = action.payload;
     },
     toggleSelectInfluencer: (state, action) => {
       const influencer = action.payload;
@@ -137,6 +134,7 @@ const influencerSlice = createSlice({
     setAgentName: (state, action) => {
       state.agentName = action.payload;
     },
+    resetInfluencerState: () => initialState,
   },
 });
 
@@ -148,5 +146,6 @@ export const {
   updateInfluence,
   setSelectedCategories,
   setAgentName,
+  resetInfluencerState,
 } = influencerSlice.actions;
 export default influencerSlice.reducer;
