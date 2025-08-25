@@ -130,7 +130,7 @@ const Dashboard = () => {
     return (
       <div className="flex w-full h-full items-center justify-center">
         <h1 className="text-inactive-text">
-          You need atleast 25,000 GA Tokens to access the hive.
+          You need atleast 25,000 GA Tokens to access the live models.
         </h1>
       </div>
     );
