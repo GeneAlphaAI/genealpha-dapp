@@ -57,13 +57,12 @@ const Dashboard = () => {
   const { balance, isFetched } = useTokenBalance(
     "0x5e6dd9a767894470e7e93e603c25f681a5adf1ae"
   );
-  console.log(balance);
+
   const handleClosePopup = () => {
     setSelectedModel(null);
   };
 
   const GetLiveModels = async () => {
-    console.log("I am called");
     setIsLoading(true);
     try {
       const res = await GetPredictions(selectedToken);
@@ -97,7 +96,6 @@ const Dashboard = () => {
         timestamp: res?.timestamp,
         models: transformedModels,
       });
-      console.log(liveModels, "here");
     } catch (error) {
       console.error(error);
     } finally {

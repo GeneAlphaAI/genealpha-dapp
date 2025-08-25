@@ -32,7 +32,7 @@ const AgentSetup = ({ onClose }) => {
 
     try {
       const response = await CreateAgent(payload);
-      console.log(response);
+
       if (response?.status === 200) {
         onClose();
         dispatch(resetInfluencerState());
@@ -44,14 +44,12 @@ const AgentSetup = ({ onClose }) => {
       setLoading(false);
     }
   };
-  console.log("Selected Influencers:", selectedCategories);
+
   return (
     <div className="bg-black/5 backdrop-blur-[12px] fixed top-0 left-0 w-full h-full z-50 flex items-center justify-center">
       <Stepper
         initialStep={0}
-        onStepChange={(step) => {
-          console.log(step);
-        }}
+        onStepChange={(step) => {}}
         onFinalStepCompleted={handleSubmit}
         backButtonText="Previous"
         nextButtonText="Next"

@@ -7,18 +7,22 @@ import { GetAgents } from "../../services/apiFunctions";
 import { useAccount } from "wagmi";
 import { addPredictionsToAgents } from "../../utilities/helpers";
 import ConnectWalletPlaceholder from "../../components/connect/ConnectWalletPlaceholder";
+import useTokenBalance from "../../utilities/useTokenBalance";
 
 const InfluencerAgent = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [agents, setAgents] = useState([]);
   const [loading, setLoading] = useState(false);
   const { address, isConnected } = useAccount();
+  const { balance, isFetched } = useTokenBalance(
+    "0x5e6dd9a767894470e7e93e603c25f681a5adf1ae"
+  );
   // 🔹 Fetch agents from API
   const fetchAgents = async () => {
     try {
       setLoading(true);
       const response = await GetAgents(address);
-      console.log(response);
+
       if (response?.status === 200) {
         let updatedAgents = addPredictionsToAgents(response?.data?.agents);
 
@@ -35,6 +39,16 @@ const InfluencerAgent = () => {
   useEffect(() => {
     fetchAgents();
   }, []);
+
+  if (Number((Number(balance) / 10 ** 18).toFixed(3)) < 50000) {
+    return (
+      <div className="flex w-full h-full items-center justify-center">
+        <h1 className="text-inactive-text">
+          You need atleast 50,000 GA Tokens to access the hive.
+        </h1>
+      </div>
+    );
+  }
 
   return (
     <div className="flex w-full h-full">

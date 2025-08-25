@@ -32,24 +32,14 @@ export const formatPrice = (price) => {
 };
 export function addPredictionsToAgents(agents) {
   if (!Array.isArray(agents)) {
-    console.log("❌ Agents is not an array:", agents);
     return [];
   }
 
-  console.log("✅ Agents input:", agents);
-
   return agents.map((agent, agentIndex) => {
-    console.log(`\n🔹 Processing agent[${agentIndex}]:`, agent);
-
     const allTweets = (agent.accounts || []).reduce(
       (acc, account, accIndex) => {
-        console.log(`   👉 Account[${accIndex}]:`, account);
-
         if (Array.isArray(account.tweets) && account.tweets.length > 0) {
-          console.log(`      ✅ Tweets found: ${account.tweets.length}`);
-
           const mappedTweets = account.tweets.map((tweet, tweetIndex) => {
-            console.log(`         📝 Tweet[${tweetIndex}]:`, tweet);
             return {
               ...tweet,
               account_info: account.account_info || {},
@@ -58,7 +48,6 @@ export function addPredictionsToAgents(agents) {
 
           acc.push(...mappedTweets);
         } else {
-          console.log("      ⚠️ No tweets found for this account");
         }
 
         return acc;
@@ -66,13 +55,9 @@ export function addPredictionsToAgents(agents) {
       []
     );
 
-    console.log(`   📊 Collected ${allTweets.length} tweets before sorting`);
-
     const sortedTweets = allTweets.sort(
       (a, b) => new Date(b.created_at) - new Date(a.created_at)
     );
-
-    console.log(`   📊 After sorting:`, sortedTweets);
 
     return {
       ...agent,
