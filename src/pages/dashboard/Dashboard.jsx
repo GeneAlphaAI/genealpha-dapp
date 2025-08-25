@@ -114,7 +114,7 @@ const Dashboard = () => {
     return (
       <div className="flex w-full h-full items-center justify-center">
         <h1 className="text-inactive-text">
-          Please connect your wallet to access the hive.
+          Please connect your wallet to access the live models.
         </h1>
       </div>
     );
