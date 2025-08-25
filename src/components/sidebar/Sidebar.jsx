@@ -18,6 +18,12 @@ const Sidebar = () => {
       disabled: false,
     },
     {
+      label: "Training",
+      pathname: "/training",
+      image: "/assets/sidebar/Training.svg",
+      disabled: false,
+    },
+    {
       label: "Leaderboard",
       pathname: "/leaderboard",
       image: "/assets/sidebar/Trophy.svg",
@@ -33,12 +39,6 @@ const Sidebar = () => {
       label: "SwarmDAO",
       pathname: "/swarm",
       image: "/assets/sidebar/Bee.svg",
-      disabled: true,
-    },
-    {
-      label: "Training",
-      pathname: "/training",
-      image: "/assets/sidebar/Training.svg",
       disabled: true,
     },
   ];
