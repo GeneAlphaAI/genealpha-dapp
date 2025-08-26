@@ -26,6 +26,23 @@ export default function Stepper({
   const isCompleted = currentStep >= totalSteps;
   const isLastStep = currentStep === totalSteps - 1;
 
+  const activeStep = stepsArray[currentStep];
+  const isSubStepActive =
+    activeStep?.props.showSubStep && activeStep?.props.subStep;
+
+  const stepTitle = isSubStepActive
+    ? activeStep.props.subStep.props?.title || activeStep.props.title
+    : activeStep.props.title;
+
+  const stepDescription = isSubStepActive
+    ? activeStep.props.subStep.props?.description ||
+      activeStep.props.description
+    : activeStep.props.description;
+
+  const stepLogo = isSubStepActive
+    ? activeStep.props.subStep.props?.logo || activeStep.props.logo
+    : activeStep.props.logo;
+
   const updateStep = (newStep) => {
     setCurrentStep(newStep);
     if (newStep >= totalSteps) onFinalStepCompleted();
@@ -33,6 +50,16 @@ export default function Stepper({
   };
 
   const handleBack = () => {
+    const activeStep = stepsArray[currentStep];
+
+    // 👇 if this step has a subStep open, just close it
+    if (activeStep?.props.showSubStep && activeStep?.props.subStep) {
+      if (activeStep?.props.onCloseSubStep) {
+        activeStep.props.onCloseSubStep();
+      }
+      return;
+    }
+
     if (currentStep > 0) {
       setDirection(-1);
       updateStep(currentStep - 1);
@@ -63,13 +90,13 @@ export default function Stepper({
           <div className="flex items-center gap-3">
             <div className="bg-[#f9f9f9] rounded-full p-1.5">
               <img
-                src={stepsArray[currentStep]?.props.logo}
+                src={stepLogo}
                 alt="Logo"
                 className="size-[20px] md:size-[24px]"
               />
             </div>
             <h3 className="text-md font-medium text-primary-text">
-              {stepsArray[currentStep]?.props.title}
+              {stepTitle}
             </h3>
           </div>
 
@@ -81,7 +108,7 @@ export default function Stepper({
         </div>
         <div>
           <p className="px-4 md:px-8 pb-4 text-xs text-secondary-text">
-            {stepsArray[currentStep]?.props.description}
+            {stepDescription}
           </p>
         </div>
 
@@ -130,15 +157,17 @@ export default function Stepper({
                   Cancel
                 </button>
               )}
-              <PrimaryButton
-                onClick={isLastStep ? handleComplete : handleNext}
-                loading={stepsArray[currentStep]?.props.loading}
-                className="px-10 w-[7rem] h-[2.0rem]"
-                disabled={stepsArray[currentStep]?.props.disabled}
-                {...nextButtonProps}
-              >
-                {isLastStep ? "Complete" : nextButtonText}
-              </PrimaryButton>
+              {!isSubStepActive && (
+                <PrimaryButton
+                  onClick={isLastStep ? handleComplete : handleNext}
+                  loading={activeStep?.props.loading}
+                  className="px-10 w-[7rem] h-[2.0rem]"
+                  disabled={activeStep?.props.disabled}
+                  {...nextButtonProps}
+                >
+                  {isLastStep ? "Complete" : nextButtonText}
+                </PrimaryButton>
+              )}
             </div>
           </div>
         )}
@@ -233,6 +262,20 @@ const stepVariants = {
   }),
 };
 
-export function Step({ children, title, disabled, loading }) {
-  return <div className="px-4 md:px-8">{children}</div>;
+export function Step({
+  children,
+  title,
+  disabled,
+  loading,
+  subStep = null,
+  showSubStep = false,
+  hoverSection = null,
+  onCloseSubStep = null,
+}) {
+  return (
+    <div className="px-4 md:px-8">
+      {showSubStep && subStep ? subStep : children}
+      {hoverSection && <div className="mt-4">{hoverSection}</div>}
+    </div>
+  );
 }
