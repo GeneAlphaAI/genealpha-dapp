@@ -3,6 +3,7 @@ import { ModelSchema } from "../../services/ModelSchema";
 
 const initialState = {
   selectedModel: null,
+  models: ModelSchema.map((m) => m.model),
   parameters: ModelSchema.reduce((acc, model) => {
     acc[model.model] = model.parameters.reduce((p, param) => {
       p[param.name] = param.default;

@@ -6,11 +6,16 @@ import SectionLabel from "../influencer/SectionLabel";
 
 import { useAccount } from "wagmi";
 import RangeSlider from "../form/RangeSlider";
+import CommonDropdown from "../form/CommonDropdown";
+import { mode } from "viem/chains";
+import { selectModel } from "../../store/slices/model";
+import CommonSelector from "../form/CommonSelector";
 
 const TrainingSetup = ({ onClose }) => {
   const dispatch = useDispatch();
   const { address } = useAccount();
   const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
+  const { models, selectedModel } = useSelector((state) => state.model);
 
   const [loading, setLoading] = useState();
   const handleSubmit = async () => {
@@ -42,6 +47,11 @@ const TrainingSetup = ({ onClose }) => {
           description="Choose a baseline model from the available options to start training. Each model uses a different method for making predictions, like tree-based, statistical, or time-series. Pick the one that fits your dataset best."
         >
           <SectionLabel heading={"Select Model"} />
+          <CommonDropdown
+            options={models}
+            defaultValue={models[0]}
+            onSelect={(model) => dispatch(selectModel(model))}
+          />
         </Step>
 
         {/* Step 2 */}
@@ -77,9 +87,14 @@ const TrainingSetup = ({ onClose }) => {
             onChange={setLearningRate}
           />
 
-          <SectionLabel
-            heading={`Categories to track`}
-            description={"Select categories that interest you to track"}
+          <CommonSelector
+            label="Model Type"
+            description="Choose one model type to continue"
+            options={["CNN", "RNN", "Transformer"]}
+            defaultValue="CNN"
+            multiple={false}
+            // selected={selected}
+            // onChange={setSelected}
           />
 
           {/* 👇 Button to open advanced settings */}
