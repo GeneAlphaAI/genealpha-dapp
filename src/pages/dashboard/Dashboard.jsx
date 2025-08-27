@@ -44,20 +44,28 @@ const modelData = [
   //     "Attention-based architecture combining static, known, and observed features for interpretable probabilistic forecasts.",
   // },
 ];
-
+const whitelist = [
+  "0xB4DC7980B7b54a96003285C7390da53F739459Ec",
+  "0xDc1427D281F26E48d8c136bCeEd363Df2b91A205",
+  "0x78169CaFc8d9d3a9C3DA3B5D1F08fE01101D6af8",
+  "0x82f936748318149331B2CFE6e9deE8ba37647063",
+  "0xc79198cb232a77e425E02E4fd1c921DC154C968E",
+  "0xF935d0A213c2eE0Cbbc5638994b8e0E3cF2F7a93",
+];
 const Dashboard = () => {
   const [selectedModel, setSelectedModel] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const handleCardClick = (model) => {
     setSelectedModel(model);
   };
-  const { isConnected } = useAccount();
+  const { isConnected, address } = useAccount();
   const [liveModels, setLiveModels] = useState(null);
   const { selectedToken } = useSelector((state) => state.token);
   const { balance, isFetched } = useTokenBalance(
     "0x5e6dd9a767894470e7e93e603c25f681a5adf1ae"
   );
-
+  const isWhitelisted = (addr) =>
+    addr && whitelist.map((a) => a.toLowerCase()).includes(addr.toLowerCase());
   const handleClosePopup = () => {
     setSelectedModel(null);
   };
@@ -126,7 +134,10 @@ const Dashboard = () => {
       </div>
     );
   }
-  if (Number((Number(balance) / 10 ** 18).toFixed(3)) < 25000) {
+  const hasRequiredBalance =
+    Number((Number(balance) / 10 ** 18).toFixed(3)) >= 25000;
+
+  if (!hasRequiredBalance && !isWhitelisted(address)) {
     return (
       <div className="flex w-full h-full items-center justify-center">
         <h1 className="text-inactive-text">
