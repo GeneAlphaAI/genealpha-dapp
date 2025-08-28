@@ -62,6 +62,7 @@ const ParameterConfigurator = ({ isAdvanced = false }) => {
 
         // Case 2: Select (categorical) → CommonSelector
         if (param.type === "select") {
+          const isMultiple = param.selectType === "multiple";
           return (
             <CommonSelector
               key={param.name}
@@ -69,14 +70,14 @@ const ParameterConfigurator = ({ isAdvanced = false }) => {
               description={param.description}
               options={param.options}
               defaultValue={param.default}
-              multiple={param.selectType === "multiple" || false}
+              multiple={isMultiple}
               selected={Array.isArray(value) ? value : [value]}
               onChange={(val) =>
                 dispatch(
                   updateParameter({
                     model: selectedModel,
                     paramName: param.name,
-                    value: param.multiple ? val : val[0],
+                    value: isMultiple ? val : val[0], // ✅ works for both single and multiple
                   })
                 )
               }

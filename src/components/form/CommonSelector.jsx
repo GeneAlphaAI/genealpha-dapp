@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
 
 export default function CommonSelector({
-  label, // section title
-  description, // optional description
-  options = [], // array of items
+  label,
+  description,
+  options = [],
   defaultValue = null,
   multiple = false,
   selected = [],
+  required = [], // NEW, safe default → []
   onChange,
   getLabel = (opt) => (typeof opt === "string" ? opt : opt.label),
   getValue = (opt) => (typeof opt === "string" ? opt : opt.value ?? opt),
@@ -27,14 +28,16 @@ export default function CommonSelector({
         }
       }
     }
-  }, [options, defaultValue, multiple, selected, onChange]);
+  }, [options, defaultValue, multiple, selected, onChange, getValue]);
 
   const toggleOption = (opt) => {
     const value = getValue(opt);
     const isSelected = selected.includes(value);
+    const isRequired = required.includes(value);
 
     if (multiple) {
-      if (isSelected && selected.length === 1) return; // prevent empty
+      if (isRequired && isSelected) return; // 🚫 required can't be deselected
+      if (isSelected && selected.length === 1) return; // 🚫 prevent empty
       const updated = isSelected
         ? selected.filter((v) => v !== value)
         : [...selected, value];
@@ -66,20 +69,27 @@ export default function CommonSelector({
           const value = getValue(opt);
           const text = getLabel(opt);
           const isSelected = selected.includes(value);
+          const isRequired = required.includes(value);
 
           return (
             <button
               key={value}
               onClick={() => toggleOption(opt)}
+              disabled={isRequired && isSelected} // disable only if required+selected
               className={`px-3 py-1 rounded-full cursor-pointer border text-xs font-regular transition-colors
                 ${
                   isSelected
                     ? "bg-primary-text text-primary border-white"
                     : "bg-transparent text-primary-text border-stroke-gray hover:border-white/60"
                 }
+                ${
+                  isRequired && isSelected
+                    ? "opacity-60 cursor-not-allowed"
+                    : ""
+                }
               `}
             >
-              {text}
+              {text} {isRequired && isSelected && "(required)"}
             </button>
           );
         })}

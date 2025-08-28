@@ -15,11 +15,19 @@ import {
 } from "../../store/slices/model";
 import CommonSelector from "../form/CommonSelector";
 import ParameterConfigurator from "./ParameterConfigurator";
+import { DatasetSchema } from "../../services/DatasetSchema";
+import {
+  setSelectedDataset,
+  setSelectedFeatures,
+} from "../../store/slices/dataset";
 
 const TrainingSetup = ({ onClose }) => {
   const dispatch = useDispatch();
   const { address } = useAccount();
   const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
+  const { selectedDataset, selectedFeatures } = useSelector(
+    (state) => state.dataset
+  );
   const { models, selectedModel } = useSelector((state) => state.model);
 
   const [loading, setLoading] = useState();
@@ -54,7 +62,7 @@ const TrainingSetup = ({ onClose }) => {
           <SectionLabel heading={"Select Model"} />
           <CommonDropdown
             options={models}
-            defaultValue={selectedModel || models[0]}
+            value={selectedModel || models[0]}
             onSelect={(model) => dispatch(selectModel(model))}
           />
         </Step>
@@ -121,16 +129,40 @@ const TrainingSetup = ({ onClose }) => {
           loading={loading}
           description="Enter the name of a dataset from Hugging Face or choose from the list of commonly used datasets. Make sure the name matches the official dataset ID so it can be loaded correctly for training."
         >
-          <SectionLabel heading={"Give your Agent a Name"} />
+          <SectionLabel heading={"Select dataset"} />
+          <CommonDropdown
+            options={DatasetSchema.map((ds) => ds.name)}
+            value={selectedDataset}
+            onSelect={(val) => dispatch(setSelectedDataset(val))}
+          />
         </Step>
         <Step
-          title={"Train"}
-          logo="/assets/training/Dumbell.svg"
+          title={"Select Features"}
+          logo="/assets/training/Features.svg"
           disabled={false}
           loading={loading}
-          description="Your model is now being trained using the selected dataset. This may take a few minutes depending on the model and data size. Sit tight while the Hive processes and evolves your model for better performance."
+          description="This process filters out unnecessary data and keeps only what truly drives performance, ensuring a faster, smarter, and more accurate model."
         >
-          <SectionLabel heading={"Give your Agent a Name"} />
+          <SectionLabel heading={"Select Features"} />
+
+          {selectedDataset && (
+            <CommonSelector
+              label={`${selectedDataset} Selected Features`}
+              description="Select features you want to use for training"
+              options={
+                DatasetSchema.find((d) => d.name === selectedDataset)
+                  ?.features || []
+              }
+              selected={selectedFeatures}
+              required={
+                DatasetSchema.find((d) => d.name === selectedDataset)
+                  ?.required || []
+              }
+              multiple={true}
+              // dispatch properly
+              onChange={(features) => dispatch(setSelectedFeatures(features))}
+            />
+          )}
         </Step>
       </Stepper>
     </div>

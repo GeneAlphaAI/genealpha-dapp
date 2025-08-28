@@ -1,12 +1,11 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function CommonDropdown({
-  options = [], // array of strings or objects
-  defaultValue = null,
+  options = [],
+  value = null, // 👈 controlled value
   onSelect,
-  getLabel = (opt) => (typeof opt === "string" ? opt : opt.label), // optional
+  getLabel = (opt) => (typeof opt === "string" ? opt : opt.label),
 }) {
-  const [selected, setSelected] = useState(defaultValue || null);
   const [open, setOpen] = useState(false);
   const [dropdownPosition, setDropdownPosition] = useState({});
   const buttonRef = useRef(null);
@@ -44,7 +43,6 @@ export default function CommonDropdown({
   }, [open]);
 
   const handleSelect = (option) => {
-    setSelected(option);
     onSelect?.(option);
     setOpen(false);
   };
@@ -57,7 +55,7 @@ export default function CommonDropdown({
         className="w-full rounded-[5px] border-[0.5px] border-stroke-gray bg-primary text-primary-text shadow-sm cursor-pointer px-4 py-2 flex justify-between items-center"
         onClick={() => setOpen(!open)}
       >
-        <span>{selected ? getLabel(selected) : "Select option"}</span>
+        <span>{value ? getLabel(value) : "Select option"}</span>
         <img
           src="/assets/dashboard/DownArrow.svg"
           alt="▼"
@@ -80,7 +78,7 @@ export default function CommonDropdown({
         >
           {options.length > 0 ? (
             options.map((opt, idx) => {
-              const isSelected = selected === opt;
+              const isSelected = value === opt;
               return (
                 <div
                   key={idx}
