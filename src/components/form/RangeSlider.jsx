@@ -1,5 +1,4 @@
 import React from "react";
-import SectionLabel from "../influencer/SectionLabel";
 
 const RangeSlider = ({
   label = "",
@@ -10,19 +9,46 @@ const RangeSlider = ({
   value,
   defaultValue,
   onChange,
+  onReset, // 👈 now passed in as prop
 }) => {
   // percent progress (for active ticks)
   const percent = ((value - min) / (max - min)) * 100;
 
   return (
-    <>
-      <div className="flex flex-col items-start font-jetbrains-mono gap-1 pb-2">
-        <h4 className="text-xs text-low-opacity uppercase">{label}</h4>
+    <div className="flex flex-col gap-1">
+      <div className="flex flex-col items-start font-jetbrains-mono gap-1">
+        <div className="flex items-center justify-between w-full">
+          <h4 className="text-xs text-low-opacity uppercase">{label}</h4>
+          <div className="flex items-center gap-2">
+            <span className="text-medium-opacity text-xxs font-jetbrains-mono">
+              {value}
+            </span>
+            {/* Reset button (swap icon path) */}
+            <button
+              type="button"
+              onClick={onReset}
+              disabled={value === defaultValue} // disable if already default
+              className={`transition  ${
+                value === defaultValue
+                  ? "opacity-30 cursor-not-allowed"
+                  : "opacity-100 cursor-pointer hover:opacity-80 opacity-70"
+              }`}
+            >
+              <img
+                src="/assets/general/reset.svg"
+                alt="reset"
+                className="size-4"
+              />
+            </button>
+          </div>
+        </div>
+
         {description && (
           <p className="text-xxs uppercase text-dull-gray">{description}</p>
         )}
       </div>
-      <div className="flex flex-col w-full ">
+
+      <div className="flex flex-col w-full">
         <div className="relative w-full h-6 flex items-center">
           {/* Dull ticks */}
           <div
@@ -51,20 +77,19 @@ const RangeSlider = ({
             min={min}
             max={max}
             step={step}
-            value={value}
-            defaultValue={defaultValue}
+            value={value} // controlled input
             onChange={(e) => onChange(Number(e.target.value))}
             className="absolute inset-0 w-full h-full bg-transparent appearance-none z-10 custom-thumb"
           />
         </div>
 
-        {/* Display current value */}
+        {/* Min/Max Labels */}
         <div className="w-full flex item-center text-low-opacity font-jetbrains-mono text-xxs justify-between">
           <span>{min}</span>
           <span>{max}</span>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

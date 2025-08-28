@@ -3,13 +3,18 @@ import { useSelector, useDispatch } from "react-redux";
 
 import Stepper, { Step } from "../influencer/Stepper";
 import SectionLabel from "../influencer/SectionLabel";
-
+import { ModelSchema } from "../../services/ModelSchema";
 import { useAccount } from "wagmi";
 import RangeSlider from "../form/RangeSlider";
 import CommonDropdown from "../form/CommonDropdown";
 import { mode } from "viem/chains";
-import { selectModel } from "../../store/slices/model";
+import {
+  resetModelParams,
+  selectModel,
+  updateParameter,
+} from "../../store/slices/model";
 import CommonSelector from "../form/CommonSelector";
+import ParameterConfigurator from "./ParameterConfigurator";
 
 const TrainingSetup = ({ onClose }) => {
   const dispatch = useDispatch();
@@ -49,7 +54,7 @@ const TrainingSetup = ({ onClose }) => {
           <SectionLabel heading={"Select Model"} />
           <CommonDropdown
             options={models}
-            defaultValue={models[0]}
+            defaultValue={selectedModel || models[0]}
             onSelect={(model) => dispatch(selectModel(model))}
           />
         </Step>
@@ -60,50 +65,52 @@ const TrainingSetup = ({ onClose }) => {
           logo="/assets/training/LinedLevels.svg"
           description="Choose key settings that control training, such as learning rate, batch size, and number of epochs. These parameters affect how quickly and effectively the model learns."
           showSubStep={showAdvancedSettings}
+          hoverSection={
+            <div className="flex items-center justify-between w-full mt-4">
+              <button
+                onClick={() => dispatch(resetModelParams(selectedModel))}
+                className="text-medium-opacity hover:opacity-70 cursor-pointer flex items-center text-xs"
+              >
+                <img
+                  src="/assets/general/reset.svg"
+                  alt="settings"
+                  className="inline size-4 mr-1"
+                />
+                Reset All
+              </button>
+
+              {/* Only render if selectedModel has advanced params */}
+              {ModelSchema.find(
+                (m) => m.model === selectedModel
+              )?.parameters.some((p) => p.advanced) && (
+                <button
+                  onClick={() => setShowAdvancedSettings(true)}
+                  className="text-medium-opacity hover:opacity-70 cursor-pointer flex items-center text-xs"
+                >
+                  <img
+                    src="/assets/general/advanced-settings.svg"
+                    alt="settings"
+                    className="inline size-4 mr-1"
+                  />
+                  Advanced Settings
+                </button>
+              )}
+            </div>
+          }
           subStep={
             <div
               title="Advanced Settings"
               description="Adjust extra configurations to fine-tune how the model trains and performs."
               logo="/assets/training/Settings.svg"
             >
-              <p>Here are advanced settings...</p>
+              <ParameterConfigurator isAdvanced={true} />
             </div>
           }
-          onCloseSubStep={() => setShowAdvancedSettings(false)} // 👈 pass down
+          onCloseSubStep={() => setShowAdvancedSettings(false)}
         >
-          <SectionLabel
-            heading={"SET INFLUENCE FROM EACH ACCOUNT"}
-            description={"Control which influencer to prioritize more"}
-          />
-          <RangeSlider
-            label="Learning Rate"
-            description={
-              "Controls how much to change the model in response to the estimated error each time the model weights are updated."
-            }
-            min={0.01}
-            max={0.1}
-            step={0.01}
-            value={learningRate}
-            onChange={setLearningRate}
-          />
-
-          <CommonSelector
-            label="Model Type"
-            description="Choose one model type to continue"
-            options={["CNN", "RNN", "Transformer"]}
-            defaultValue="CNN"
-            multiple={false}
-            // selected={selected}
-            // onChange={setSelected}
-          />
+          <ParameterConfigurator />
 
           {/* 👇 Button to open advanced settings */}
-          <button
-            onClick={() => setShowAdvancedSettings(true)}
-            className="mt-4 px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600"
-          >
-            Open Advanced Settings
-          </button>
         </Step>
 
         {/* Step 3 */}

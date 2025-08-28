@@ -273,9 +273,18 @@ export function Step({
   onCloseSubStep = null,
 }) {
   return (
-    <div className="px-4 md:px-8">
-      {showSubStep && subStep ? subStep : children}
-      {hoverSection && <div className="mt-4">{hoverSection}</div>}
+    <div className="relative flex flex-col h-full px-4 md:px-8">
+      {/* Main step content */}
+      <div className="flex-1 overflow-y-auto">
+        {showSubStep && subStep ? subStep : children}
+      </div>
+
+      {/* Hover section pinned at bottom */}
+      {hoverSection && !showSubStep ? (
+        <div className="sticky z-[100] bottom-0 bg-primary">{hoverSection}</div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }

@@ -47,7 +47,7 @@ export default function CommonSelector({
   };
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-1">
       {/* Header */}
       {(label || description) && (
         <div className="flex flex-col items-start font-jetbrains-mono gap-1 pb-2">

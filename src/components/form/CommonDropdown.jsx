@@ -79,17 +79,25 @@ export default function CommonDropdown({
           }}
         >
           {options.length > 0 ? (
-            options.map((opt, idx) => (
-              <div
-                key={idx}
-                onMouseDown={() => handleSelect(opt)}
-                className={`px-4 py-2 cursor-pointer hover:bg-white/5 text-sm ${
-                  selected === opt ? "bg-white/10" : ""
-                }`}
-              >
-                {getLabel(opt)}
-              </div>
-            ))
+            options.map((opt, idx) => {
+              const isSelected = selected === opt;
+              return (
+                <div
+                  key={idx}
+                  onMouseDown={() => handleSelect(opt)}
+                  className={`px-4 py-2 cursor-pointer hover:bg-white/5 text-sm flex justify-between items-center ${
+                    isSelected ? "bg-white/5" : ""
+                  }`}
+                >
+                  <span>{getLabel(opt)}</span>
+                  {isSelected && (
+                    <span className="ml-2 text-xs text-secondary-text">
+                      Selected
+                    </span>
+                  )}
+                </div>
+              );
+            })
           ) : (
             <div className="px-4 py-2 text-xs text-gray-500">No options</div>
           )}

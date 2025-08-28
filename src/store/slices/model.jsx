@@ -2,11 +2,18 @@ import { createSlice } from "@reduxjs/toolkit";
 import { ModelSchema } from "../../services/ModelSchema";
 
 const initialState = {
-  selectedModel: null,
+  selectedModel: ModelSchema[0].model,
   models: ModelSchema.map((m) => m.model),
   parameters: ModelSchema.reduce((acc, model) => {
     acc[model.model] = model.parameters.reduce((p, param) => {
-      p[param.name] = param.default;
+      // If multiple-select → always ensure array
+      if (param.type === "select" && param.selectType === "multiple") {
+        p[param.name] = Array.isArray(param.default)
+          ? param.default
+          : [param.default];
+      } else {
+        p[param.name] = param.default;
+      }
       return p;
     }, {});
     return acc;
