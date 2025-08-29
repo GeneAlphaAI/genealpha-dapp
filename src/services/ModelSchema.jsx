@@ -24,7 +24,6 @@ export const ModelSchema = [
         description:
           "-1 uses all cores; limit cores for controlled parallelism",
         type: "number",
-        // selectType: "number",
         max: 4,
         min: -1,
         step: 1,
@@ -51,7 +50,7 @@ export const ModelSchema = [
         label: "Metric",
         description: "Most practical performance metrics",
         type: "select",
-        selectType: "multiple", // ✅ allows multiple metrics
+        selectType: "multiple",
         options: ["rmse", "mae"],
         default: ["rmse"],
         advanced: false,
@@ -74,7 +73,7 @@ export const ModelSchema = [
         min: 20,
         max: 80,
         default: 31,
-        advanced: false,
+        advanced: true,
       },
       {
         name: "learning_rate",
@@ -95,7 +94,7 @@ export const ModelSchema = [
         min: 0.7,
         max: 1.0,
         step: 0.05,
-        default: 1.0,
+        default: 0.9,
         advanced: true,
       },
       {
@@ -106,7 +105,7 @@ export const ModelSchema = [
         min: 0.7,
         max: 1.0,
         step: 0.05,
-        default: 1.0,
+        default: 0.8,
         advanced: true,
       },
       {
@@ -116,7 +115,7 @@ export const ModelSchema = [
         type: "number",
         min: 1,
         max: 10,
-        default: 1,
+        default: 5,
         advanced: true,
       },
       {
@@ -130,7 +129,7 @@ export const ModelSchema = [
           { label: "0 (Info Mode)", value: 0 },
         ],
         default: -1,
-        advanced: false,
+        advanced: true,
       },
       {
         name: "random_state",
@@ -151,7 +150,7 @@ export const ModelSchema = [
         max: 1000,
         step: 50,
         default: 100,
-        advanced: false,
+        advanced: true,
       },
       {
         name: "early_stopping_rounds",
@@ -161,7 +160,7 @@ export const ModelSchema = [
         min: 10,
         max: 100,
         step: 5,
-        default: 50,
+        default: 10,
         advanced: false,
       },
     ],
@@ -198,7 +197,7 @@ export const ModelSchema = [
         min: 2,
         max: 10,
         default: 2,
-        advanced: false,
+        advanced: true,
       },
       {
         name: "min_samples_leaf",
@@ -208,14 +207,14 @@ export const ModelSchema = [
         min: 1,
         max: 5,
         default: 1,
-        advanced: false,
+        advanced: true,
       },
       {
         name: "max_features",
         label: "Max Features",
         description: "Controls feature randomness",
         type: "select",
-        selectType: "single", // ✅ one choice only
+        selectType: "single",
         options: ["sqrt", "log2", "0.2", "0.4", "0.6", "0.8"],
         default: "sqrt",
         advanced: true,
@@ -246,7 +245,7 @@ export const ModelSchema = [
         min: -1,
         max: 4,
         default: -1,
-        advanced: true,
+        advanced: false,
       },
     ],
   },

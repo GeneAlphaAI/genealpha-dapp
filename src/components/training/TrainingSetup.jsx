@@ -5,14 +5,9 @@ import Stepper, { Step } from "../influencer/Stepper";
 import SectionLabel from "../influencer/SectionLabel";
 import { ModelSchema } from "../../services/ModelSchema";
 import { useAccount } from "wagmi";
-import RangeSlider from "../form/RangeSlider";
 import CommonDropdown from "../form/CommonDropdown";
-import { mode } from "viem/chains";
-import {
-  resetModelParams,
-  selectModel,
-  updateParameter,
-} from "../../store/slices/model";
+
+import { resetModelParams, selectModel } from "../../store/slices/model";
 import CommonSelector from "../form/CommonSelector";
 import ParameterConfigurator from "./ParameterConfigurator";
 import { DatasetSchema } from "../../services/DatasetSchema";
