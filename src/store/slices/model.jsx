@@ -2,11 +2,13 @@ import { createSlice } from "@reduxjs/toolkit";
 import { ModelSchema } from "../../services/ModelSchema";
 
 const initialState = {
-  selectedModel: ModelSchema[0].model,
+  // default to first model's value
+  selectedModel: ModelSchema[0].model.value,
+  // store list of { label, value }
   models: ModelSchema.map((m) => m.model),
-  parameters: ModelSchema.reduce((acc, model) => {
-    acc[model.model] = model.parameters.reduce((p, param) => {
-      // If multiple-select → always ensure array
+  // parameters keyed by model.value
+  parameters: ModelSchema.reduce((acc, m) => {
+    acc[m.model.value] = m.parameters.reduce((p, param) => {
       if (param.type === "select" && param.selectType === "multiple") {
         p[param.name] = Array.isArray(param.default)
           ? param.default
@@ -25,25 +27,25 @@ const modelSlice = createSlice({
   initialState,
   reducers: {
     selectModel(state, action) {
-      state.selectedModel = action.payload;
+      state.selectedModel = action.payload; // should be model.value
     },
     updateParameter(state, action) {
-      const { model, paramName, value } = action.payload;
+      const { model, paramName, value } = action.payload; // model = model.value
       state.parameters[model][paramName] = value;
     },
     resetModelParams(state, action) {
-      const model = action.payload;
-      const schema = ModelSchema.find((m) => m.model === model);
+      const modelValue = action.payload;
+      const schema = ModelSchema.find((m) => m.model.value === modelValue);
       if (schema) {
-        state.parameters[model] = schema.parameters.reduce((p, param) => {
+        state.parameters[modelValue] = schema.parameters.reduce((p, param) => {
           p[param.name] = param.default;
           return p;
         }, {});
       }
     },
     resetParameter(state, action) {
-      const { model, paramName } = action.payload;
-      const schema = ModelSchema.find((m) => m.model === model);
+      const { model, paramName } = action.payload; // model = model.value
+      const schema = ModelSchema.find((m) => m.model.value === model);
       if (schema) {
         const paramSchema = schema.parameters.find((p) => p.name === paramName);
         if (paramSchema) {
@@ -60,4 +62,5 @@ export const {
   resetModelParams,
   resetParameter,
 } = modelSlice.actions;
+
 export default modelSlice.reducer;

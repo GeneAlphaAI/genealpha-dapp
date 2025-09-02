@@ -1,42 +1,55 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-
 import Stepper, { Step } from "../influencer/Stepper";
 import SectionLabel from "../influencer/SectionLabel";
 import { ModelSchema } from "../../services/ModelSchema";
 import { useAccount } from "wagmi";
 import CommonDropdown from "../form/CommonDropdown";
-
 import { resetModelParams, selectModel } from "../../store/slices/model";
-import CommonSelector from "../form/CommonSelector";
 import ParameterConfigurator from "./ParameterConfigurator";
-import { DatasetSchema } from "../../services/DatasetSchema";
-import {
-  setSelectedDataset,
-  setSelectedFeatures,
-} from "../../store/slices/dataset";
+import { StartModelTraining } from "../../services/apiFunctions";
 
-const TrainingSetup = ({ onClose }) => {
+const TrainingSetup = ({ openProgressPopup, onClose, setDeployedJob }) => {
   const dispatch = useDispatch();
   const { address } = useAccount();
   const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
-  const { selectedDataset, selectedFeatures } = useSelector(
-    (state) => state.dataset
+  // const { selectedDataset, selectedFeatures } = useSelector(
+  //   (state) => state.dataset
+  // );
+  const { models, selectedModel, parameters } = useSelector(
+    (state) => state.model
   );
-  const { models, selectedModel } = useSelector((state) => state.model);
 
   const [loading, setLoading] = useState();
   const handleSubmit = async () => {
     setLoading(true);
-
+    console.log(
+      "Training started for model:",
+      selectedModel,
+      parameters[selectedModel]
+    );
     try {
+      let payload = {
+        model_type: selectedModel,
+        dataset: "sample",
+        config: parameters[selectedModel],
+      };
+
+      const response = await StartModelTraining(payload);
+      console.log("Training Response:", response);
+      if (response?.status === 200) {
+        setDeployedJob(response?.data);
+        onClose();
+        openProgressPopup();
+      } else {
+      }
+      // onClose();
     } catch (error) {
       console.error("Submit Error", error);
     } finally {
       setLoading(false);
     }
   };
-  const [learningRate, setLearningRate] = useState(0.02);
 
   return (
     <div className="bg-black/5 backdrop-blur-[12px] fixed top-0 left-0 w-full h-full z-50 flex items-center justify-center">
@@ -57,7 +70,7 @@ const TrainingSetup = ({ onClose }) => {
           <SectionLabel heading={"Select Model"} />
           <CommonDropdown
             options={models}
-            value={selectedModel || models[0]}
+            value={selectedModel || models[0].value}
             onSelect={(model) => dispatch(selectModel(model))}
           />
         </Step>
@@ -65,6 +78,7 @@ const TrainingSetup = ({ onClose }) => {
         {/* Step 2 */}
         <Step
           title={"Set Parameters"}
+          loading={loading}
           logo="/assets/training/LinedLevels.svg"
           description="Choose key settings that control training, such as learning rate, batch size, and number of epochs. These parameters affect how quickly and effectively the model learns."
           showSubStep={showAdvancedSettings}
@@ -84,7 +98,7 @@ const TrainingSetup = ({ onClose }) => {
 
               {/* Only render if selectedModel has advanced params */}
               {ModelSchema.find(
-                (m) => m.model === selectedModel
+                (m) => m.model.value === selectedModel
               )?.parameters.some((p) => p.advanced) && (
                 <button
                   onClick={() => setShowAdvancedSettings(true)}
@@ -112,12 +126,10 @@ const TrainingSetup = ({ onClose }) => {
           onCloseSubStep={() => setShowAdvancedSettings(false)}
         >
           <ParameterConfigurator />
-
-          {/* 👇 Button to open advanced settings */}
         </Step>
 
         {/* Step 3 */}
-        <Step
+        {/* <Step
           title={"Select Dataset"}
           logo="/assets/training/Database.svg"
           disabled={false}
@@ -130,8 +142,8 @@ const TrainingSetup = ({ onClose }) => {
             value={selectedDataset}
             onSelect={(val) => dispatch(setSelectedDataset(val))}
           />
-        </Step>
-        <Step
+        </Step> */}
+        {/* <Step
           title={"Select Features"}
           logo="/assets/training/Features.svg"
           disabled={false}
@@ -158,7 +170,7 @@ const TrainingSetup = ({ onClose }) => {
               onChange={(features) => dispatch(setSelectedFeatures(features))}
             />
           )}
-        </Step>
+        </Step> */}
       </Stepper>
     </div>
   );

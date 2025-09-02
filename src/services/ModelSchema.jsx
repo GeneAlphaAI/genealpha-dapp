@@ -1,6 +1,6 @@
 export const ModelSchema = [
   {
-    model: "Linear Regression",
+    model: { label: "Linear Regression", value: "linear_regression" },
     parameters: [
       {
         name: "fit_intercept",
@@ -33,7 +33,7 @@ export const ModelSchema = [
     ],
   },
   {
-    model: "LightGBM",
+    model: { label: "LightGBM", value: "lightgbm" },
     parameters: [
       {
         name: "objective",
@@ -166,7 +166,7 @@ export const ModelSchema = [
     ],
   },
   {
-    model: "Random Forest",
+    model: { label: "Random Forest", value: "random_forest" },
     parameters: [
       {
         name: "n_estimators",

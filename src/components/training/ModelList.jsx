@@ -2,7 +2,28 @@ import React from "react";
 import PrimaryButton from "../buttons/PrimaryButton";
 import ModelCard from "./ModelCard";
 
-const ModelList = ({ toggleSetupPopup }) => {
+const MODEL_METADATA = [
+  {
+    title: "LightGBM",
+    key: "lightgbm",
+    description:
+      "Lightning-fast gradient boosting trees, handling categorical features and large datasets effortlessly well.",
+  },
+  {
+    title: "Random Forest",
+    key: "random_forest",
+    description:
+      "Ensemble of decision trees averaging predictions, reducing variance and guarding against overfitting.",
+  },
+  {
+    title: "Linear Regression",
+    key: "linear_regression",
+    description:
+      "Simple yet powerful model capturing linear relationships, easy to interpret and fast to train.",
+  },
+];
+
+const ModelList = ({ jobs, toggleSetupPopup }) => {
   return (
     <div className="w-full md:mx-2 flex flex-col gap-4">
       {/* Header */}
@@ -10,9 +31,9 @@ const ModelList = ({ toggleSetupPopup }) => {
         <div>
           <div className="flex gap-2 items-center">
             <h1 className="text-md font-medium">Trained Models</h1>
-            <span className="bg-white/4 text-inactive-text px-4 font-medium font-jetbrains-mono text-xxs lg:text-xs uppercase flex items-center justify-center rounded-[5px] h-max p-1">
+            {/* <span className="bg-white/4 text-inactive-text px-4 font-medium font-jetbrains-mono text-xxs lg:text-xs uppercase flex items-center justify-center rounded-[5px] h-max p-1">
               1/5 Trained
-            </span>
+            </span> */}
           </div>
           <p className="font-regular  text-sm text-secondary-text max-w-[60ch] 2xl:max-w-[80ch]">
             View all the models you've trained in the Hive. Track metrics,
@@ -24,10 +45,27 @@ const ModelList = ({ toggleSetupPopup }) => {
           Train Model
         </PrimaryButton>
       </div>
-      <ModelCard
-        title="LightGBM"
-        description="A model trained to predict cryptocurrency market sentiment based on Twitter data."
-      />
+
+      {/* Model Cards */}
+      <div className="flex flex-wrap gap-2">
+        {jobs?.map((job) => {
+          const metadata = MODEL_METADATA.find(
+            (m) => m.key === job?.model_type
+          );
+          console.log("Job:", metadata, job?.model_type);
+
+          return (
+            <ModelCard
+              key={job?.job_id}
+              id={job?.job_id}
+              title={metadata ? metadata.title : job?.model_type}
+              description={metadata ? metadata.description : ""}
+              progress={job?.progress}
+              status={job?.status}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 };

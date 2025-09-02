@@ -12,7 +12,7 @@ const ParameterConfigurator = ({ isAdvanced = false }) => {
 
   if (!selectedModel) return null;
 
-  const schema = ModelSchema.find((m) => m.model === selectedModel);
+  const schema = ModelSchema.find((m) => m.model.value === selectedModel);
   if (!schema) return null;
 
   const paramValues = parameters[selectedModel];

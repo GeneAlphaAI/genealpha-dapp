@@ -2,6 +2,7 @@ import axios from "axios";
 const llamaAPI = process.env.DEFI_LLAMA_URL;
 const genealphaAPI = process.env.GENEALPHA_API_URL;
 const genealphaAgentAPI = process.env.GENEALPHA_AGENT_API;
+const genealphaTrainigAPI = process.env.GENEALPHA_TRAINING_API;
 export async function GetPredictions(token) {
   try {
     if (token) {
@@ -97,6 +98,123 @@ export async function GetAgents(walletAddress) {
     }
   } catch (error) {
     console.error("Error fetching iinfluencer", error.message);
+    return error?.response;
+  }
+}
+
+export async function GetAllJobs(limit = 100, offset = 0, status = "") {
+  try {
+    const response = await axios.get(`${genealphaTrainigAPI}/jobs/`, {
+      params: {
+        limit,
+        offset,
+        status,
+      },
+      headers: {
+        accept: "application/json",
+      },
+    });
+
+    if (response.status === 200) {
+      return response;
+    }
+  } catch (error) {
+    console.error("Error fetching jobs:", error.message);
+    return error?.response;
+  }
+}
+
+export async function GetAllJobsStats() {
+  try {
+    const response = await axios.get(
+      `${genealphaTrainigAPI}/jobs/stats/summary`,
+      {
+        headers: {
+          accept: "application/json",
+        },
+      }
+    );
+
+    if (response.status === 200) {
+      return response.data;
+    }
+  } catch (error) {
+    console.error("Error fetching job stats:", error.message);
+    return error?.response;
+  }
+}
+
+export async function CancelJob(jobId) {
+  try {
+    const response = await axios.delete(
+      `${genealphaTrainigAPI}/jobs/${jobId}`,
+      {
+        headers: {
+          accept: "application/json",
+        },
+      }
+    );
+
+    if (response.status === 200) {
+      return response.data;
+    }
+  } catch (error) {
+    console.error("Error fetching job stats:", error.message);
+    return error?.response;
+  }
+}
+
+export async function GetJobStatus(jobId) {
+  try {
+    const response = await axios.get(`${genealphaTrainigAPI}/jobs/${jobId}`, {
+      headers: {
+        accept: "application/json",
+      },
+    });
+
+    if (response.status === 200) {
+      return response.data;
+    }
+  } catch (error) {
+    console.error("Error fetching job stats:", error.message);
+    return error?.response;
+  }
+}
+
+export async function GetAllModels() {
+  try {
+    const response = await axios.get(`${genealphaTrainigAPI}/training/models`, {
+      headers: {
+        accept: "application/json",
+      },
+    });
+
+    if (response.status === 200) {
+      return response.data;
+    }
+  } catch (error) {
+    console.error("Error fetching job stats:", error.message);
+    return error?.response;
+  }
+}
+
+export async function StartModelTraining(payload) {
+  try {
+    const response = await axios.post(
+      `${genealphaTrainigAPI}/training/start`,
+      payload,
+      {
+        headers: {
+          accept: "application/json",
+        },
+      }
+    );
+    console.log(response);
+    if (response.status === 200) {
+      return response;
+    }
+  } catch (error) {
+    console.error("Error fetching job stats:", error.message);
     return error?.response;
   }
 }
