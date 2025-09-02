@@ -55,7 +55,6 @@ const AgentSetup = ({ onClose }) => {
         nextButtonText="Next"
         onClose={onClose}
       >
-        {/* Step 1 */}
         <Step
           title={"Select Influencers"}
           logo="/assets/influencer/SelectInfluencer.svg"
@@ -64,14 +63,13 @@ const AgentSetup = ({ onClose }) => {
         >
           <SectionLabel heading={"Enter X (Twitter) Username"} />
 
-          {/* Search bar */}
           <ExpandingSearchBar />
           {selectedInfluencers.length != 0 && (
             <h5 className="text-xs font-jetbrains-mono text-center w-full py-4 text-low-opacity uppercase">
               {selectedInfluencers.length}/5 Selected influencers
             </h5>
           )}
-          {/* Selected influencer tags */}
+
           {selectedInfluencers.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-3">
               {selectedInfluencers.map((influencer) => (
@@ -112,7 +110,6 @@ const AgentSetup = ({ onClose }) => {
           )}
         </Step>
 
-        {/* Step 2 */}
         <Step
           title={"Preferences & Biases"}
           logo="/assets/influencer/Preferences.svg"
@@ -134,7 +131,6 @@ const AgentSetup = ({ onClose }) => {
           />
         </Step>
 
-        {/* Step 3 */}
         <Step
           title={"Deploy"}
           logo="/assets/influencer/Deploy.svg"

@@ -10,6 +10,7 @@ import Leaderboard from "./pages/leaderboard.jsx/Leaderboard";
 import InfluencerAgent from "./pages/influencer/InfluencerAgent";
 import { useAccount } from "wagmi";
 import ConnectWalletPlaceholder from "./components/connect/ConnectWalletPlaceholder";
+import Training from "./pages/training/Training";
 
 function App() {
   const location = useLocation();
@@ -44,6 +45,7 @@ function App() {
               <Route path="/breeding" element={<Breeding />} />
               <Route path="/swarm" element={<SwarmDAO />} />
               <Route path="/influencer" element={<InfluencerAgent />} />
+              <Route path="/training" element={<Training />} />
               <Route path="*" element={<Navigate to={"/"} />} />
             </Routes>
           )}
