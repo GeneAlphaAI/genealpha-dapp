@@ -16,7 +16,7 @@ export async function GetPredictions(token) {
           },
         }
       );
-      console.log(predictionResponse);
+
       if (predictionResponse.status === 200) {
         return predictionResponse?.data;
       } else {
@@ -60,7 +60,6 @@ export async function SearchInfluencer(username, walletAddress) {
         walletAddress,
       }
     );
-    console.log(influencerResponse);
 
     if (influencerResponse.status === 200) {
       return influencerResponse;
@@ -77,7 +76,6 @@ export async function CreateAgent(data) {
       `${genealphaAgentAPI}/user/agent/create`,
       data
     );
-    console.log(createAgentResponse);
 
     if (createAgentResponse.status === 200) {
       return createAgentResponse;
