@@ -63,14 +63,6 @@ const ModelCard = ({
             status={status}
             isInsideCard={true}
           />
-
-          {/* Optional: allow cancelling mid-progress */}
-          <SecondaryButton
-            onClick={handleCancel}
-            className="mt-4 px-5 w-[8rem] h-[2.1rem]"
-          >
-            Cancel
-          </SecondaryButton>
         </div>
       );
     } else {
