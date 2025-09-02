@@ -23,7 +23,7 @@ const MODEL_METADATA = [
   },
 ];
 
-const ModelList = ({ jobs, toggleSetupPopup }) => {
+const ModelList = ({ jobs, toggleSetupPopup, onJobCancelled }) => {
   return (
     <div className="w-full md:mx-2 flex flex-col gap-4">
       {/* Header */}
@@ -52,8 +52,6 @@ const ModelList = ({ jobs, toggleSetupPopup }) => {
           const metadata = MODEL_METADATA.find(
             (m) => m.key === job?.model_type
           );
-          console.log("Job:", metadata, job?.model_type);
-
           return (
             <ModelCard
               key={job?.job_id}
@@ -62,6 +60,7 @@ const ModelList = ({ jobs, toggleSetupPopup }) => {
               description={metadata ? metadata.description : ""}
               progress={job?.progress}
               status={job?.status}
+              onJobCancelled={onJobCancelled}
             />
           );
         })}

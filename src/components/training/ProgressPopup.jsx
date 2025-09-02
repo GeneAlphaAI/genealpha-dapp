@@ -3,7 +3,7 @@ import TrainingProgress from "./TrainingProgress";
 import SecondaryButton from "../buttons/SecondaryButton";
 import PrimaryButton from "../buttons/PrimaryButton";
 
-const ProgressPopup = ({ progress, status, onClose }) => {
+const ProgressPopup = ({ progress, status, onClose, jobId }) => {
   return (
     <div
       className="bg-black/5 backdrop-blur-[12px] fixed top-0 left-0 w-full h-full z-50 flex items-center justify-center"
@@ -37,7 +37,7 @@ const ProgressPopup = ({ progress, status, onClose }) => {
             performance.
           </p>
 
-          <TrainingProgress progress={progress} status={status} />
+          <TrainingProgress jobId={jobId} progress={progress} status={status} />
 
           <div className="flex justify-end mt-6">
             {progress === 100 ? (

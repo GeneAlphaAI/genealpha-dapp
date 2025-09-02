@@ -50,7 +50,7 @@ const InfluencerAgent = () => {
   }, []);
 
   const hasRequiredBalance =
-    Number((Number(balance) / 10 ** 18).toFixed(3)) >= 25000;
+    Number((Number(balance) / 10 ** 18).toFixed(3)) >= 50000;
 
   if (!hasRequiredBalance && !isWhitelisted(address)) {
     return (

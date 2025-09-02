@@ -21,9 +21,9 @@ const SecondaryButton = ({
       type={type}
       onClick={onClick}
       disabled={isDisabled || loading}
-      className={`group text-center bg-primary-text/5 border-[0.5px] border-stroke-gray  ${mobilePadding} ${defaultPadding} ${roundedStyle} ${
+      className={`group text-center bg-primary-text/2 border-[0.5px] border-stroke-gray  ${mobilePadding} ${defaultPadding} ${roundedStyle} ${
         isDisabled ? " cursor-not-allowed" : "cursor-pointer"
-      } group-hover:animate-gradient flex items-center justify-center gap-2 ${className}`}
+      } hover:bg-primary-text/5 flex items-center justify-center gap-2 ${className}`}
       {...props}
     >
       {loading ? (

@@ -10,7 +10,7 @@ const TrainingProgress = ({
   const [progress, setProgress] = useState(initialProgress ?? 0);
   const [status, setStatus] = useState(initialStatus ?? "pending");
   const [animatedWidth, setAnimatedWidth] = useState(initialProgress ?? 0);
-
+  console.log("Rendering TrainingProgress with:", jobId);
   const isComplete = progress >= 100;
   const isFailed = status?.toLowerCase() === "failed";
 
