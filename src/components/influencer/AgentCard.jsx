@@ -10,7 +10,7 @@ const AgentCard = ({
 }) => {
   const [isAtBottom, setIsAtBottom] = useState(false);
   const scrollRef = useRef(null);
-
+  console.log("Rendering AgentCard with:", combinedPrediction);
   // Background color based on category
   const getBgColor = (category) => {
     switch (category) {
@@ -46,7 +46,8 @@ const AgentCard = ({
   }, []);
 
   return (
-    <button
+    <div
+      typeof="button"
       className={`bg-white/2 border-1 space-y-3 border-stroke-gray rounded-[10px] flex flex-col cursor-pointer w-full h-max md:h-[400px] xl:max-w-[500px] 2xl:min-w-[450px] 2xl:max-w-[450px] px-6 py-4`}
       onClick={() => {
         if (predictions?.length > 0) {
@@ -124,8 +125,28 @@ const AgentCard = ({
                       </span>
                     </div>
                     <p className="text-primary-text line-clamp-3 mt-1">
-                      {pred.text}
+                      {pred?.summary?.reason}
                     </p>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevent parent onClick
+                        window.open(
+                          `https://x.com/${pred?.account_info?._id}/status/${pred?.tweet_id}`,
+                          "_blank"
+                        );
+                      }}
+                      className="bg-primary/40 cursor-pointer flex px-2 py-2 mt-2 rounded-[5px]  w-max"
+                    >
+                      <span className="max-w-[36ch] text-xxs text-low-opacity truncate">
+                        {pred?.text}
+                      </span>
+
+                      <img
+                        src="/assets/general/external-link.svg"
+                        alt="quote"
+                        className="size-4  ml-2"
+                      />
+                    </button>
                   </div>
                 </div>
               ))}
@@ -154,7 +175,7 @@ const AgentCard = ({
           </div>
         </div>
       )}
-    </button>
+    </div>
   );
 };
 

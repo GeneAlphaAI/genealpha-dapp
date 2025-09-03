@@ -39,8 +39,9 @@ const AgentPopup = ({ onClose, agent }) => {
       preds = preds.filter((p) => p.account_info?.username === selectedProfile);
     }
 
-    return preds.sort((a, b) =>
-      a.account_info?.name.localeCompare(b.account_info?.username)
+    // Sort by created_at date, newest to oldest
+    return preds.sort(
+      (a, b) => new Date(b.created_at) - new Date(a.created_at)
     );
   }, [agent?.predictions, selectedProfile]);
 
@@ -89,7 +90,7 @@ const AgentPopup = ({ onClose, agent }) => {
                 </div>
               </div>
               <p className="text-xs text-primary-text max-w-[80ch]">
-                {agent?.combinedPrediction?.text ||
+                {agent?.combined_prediction?.reasoning ||
                   " A combined prediction will appear once influencers start discussing similar trends."}
               </p>
             </div>
@@ -187,7 +188,8 @@ const AgentPopup = ({ onClose, agent }) => {
                   <th className="p-2 font-light text-left">Influencer</th>
                   <th className="p-2 font-light text-left">Asset</th>
                   <th className="p-2 font-light text-left">Prediction</th>
-                  <th className="p-2 font-light text-left">Actual</th>
+                  <th className="p-2 font-light text-left">Predicted Price</th>
+                  <th className="p-2 font-light text-left">Actual Price</th>
                   <th className="p-2 font-light text-center">Accuracy</th>
                   <th className="p-2 font-light text-right">Category</th>
                 </tr>
@@ -195,11 +197,27 @@ const AgentPopup = ({ onClose, agent }) => {
               <tbody className="">
                 {filteredPredictions.map((pred, idx) => {
                   let actualPrice = pred?.summary?.current_price
-                    ? `${pred?.summary?.token} price: $${pred?.summary?.current_price}`
-                    : "-";
-                  let accuracy = pred?.summary?.accuracy
-                    ? `${pred?.accuracy || 0 * 100}%`
-                    : "-";
+                    ? `${pred?.summary?.token}: $${pred?.summary?.current_price}`
+                    : "N/A";
+                  let predictedPrice = pred?.summary?.predicted_price
+                    ? `${pred?.summary?.token}: $${pred?.summary?.predicted_price}`
+                    : "N/A";
+                  let accuracy = "N/A";
+                  if (
+                    pred?.summary?.current_price &&
+                    pred?.summary?.predicted_price
+                  ) {
+                    const absoluteError = Math.abs(
+                      pred?.summary?.predicted_price -
+                        pred?.summary?.current_price
+                    );
+                    const percentageError =
+                      (absoluteError / pred?.summary?.current_price) * 100;
+
+                    accuracy =
+                      Math.max(0, 100 - percentageError).toFixed(0) + "%";
+                  }
+
                   return (
                     <tr key={idx} className="align-middle ">
                       <td className="p-2 text-center align-middle font-jetbrains-mono uppercase text-low-opacity">
@@ -261,17 +279,38 @@ const AgentPopup = ({ onClose, agent }) => {
                       </td>
 
                       <td className="p-2 text-left align-middle font-jetbrains-mono min-w-[150px] max-w-[200px] uppercase text-low-opacity">
-                        {pred?.summary?.token || "-"}
+                        {pred?.summary?.token || "N/A"}
                       </td>
 
                       <td
-                        className={`p-2 text-left align-middle border-[0.5px] min-w-[300px]  text-primary-text ${getPredictionColor(
+                        className={`p-2 text-left align-middle border-[0.5px] w-[400px] min-w-[400px] max-w-[400px]  text-primary-text ${getPredictionColor(
                           pred.category
-                        )} rounded-[5px] w-[400px]`}
+                        )} rounded-[5px]`}
                       >
                         {pred?.summary?.reason}
-                      </td>
+                        <button
+                          onClick={() =>
+                            window.open(
+                              `https://x.com/${pred?.account_info?._id}/status/${pred?.tweet_id}`,
+                              "_blank"
+                            )
+                          }
+                          className="bg-primary/40 cursor-pointer flex px-2 py-2 mt-2 rounded-[5px]  w-max"
+                        >
+                          <span className="max-w-[45ch] text-xxs text-low-opacity truncate">
+                            {pred?.text}
+                          </span>
 
+                          <img
+                            src="/assets/general/external-link.svg"
+                            alt="quote"
+                            className="size-4  ml-2"
+                          />
+                        </button>
+                      </td>
+                      <td className="p-2 text-left text-primary-text font-jetbrains-mono uppercase align-middle min-w-[200px] max-w-[500px]">
+                        {predictedPrice}
+                      </td>
                       <td className="p-2 text-left text-primary-text font-jetbrains-mono uppercase align-middle min-w-[200px] max-w-[500px]">
                         {actualPrice}
                       </td>

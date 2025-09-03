@@ -39,15 +39,17 @@ const AgentsList = ({ agents, addAgent }) => {
       {/* Agent Cards */}
       <div className="flex flex-wrap gap-4">
         {agents?.map((agent) => (
-          <AgentCard
-            key={agent?.agent}
-            name={agent?.agent}
-            sources={agent?.accounts}
-            combinedPrediction={agent?.combinedPrediction?.text}
-            profiles={agent?.combinedPrediction?.profiles}
-            predictions={agent?.predictions}
-            onClick={() => handleCardClick(agent)}
-          />
+          <>
+            <AgentCard
+              key={agent?.agent}
+              name={agent?.agent}
+              sources={agent?.accounts}
+              combinedPrediction={agent?.combined_prediction?.reasoning}
+              profiles={agent?.combinedPrediction?.profiles}
+              predictions={agent?.predictions}
+              onClick={() => handleCardClick(agent)}
+            />
+          </>
         ))}
       </div>
 
