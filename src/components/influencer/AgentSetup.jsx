@@ -34,12 +34,18 @@ const AgentSetup = ({ onClose }) => {
       const response = await CreateAgent(payload);
 
       if (response?.status === 200) {
+        showToast(
+          "success",
+          "Agent Setup Successful",
+          "/assets/Toast/Success.svg"
+        );
         onClose();
         dispatch(resetInfluencerState());
       } else {
       }
     } catch (error) {
       console.error("Submit Error", error);
+      showToast("error", "Agent Setup Successful", "/assets/Toast/Error.svg");
     } finally {
       setLoading(false);
     }
