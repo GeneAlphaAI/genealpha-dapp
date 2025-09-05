@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Stepper, { Step } from "../influencer/Stepper";
 import SectionLabel from "../influencer/SectionLabel";
@@ -7,27 +7,53 @@ import { useAccount } from "wagmi";
 import CommonDropdown from "../form/CommonDropdown";
 import { resetModelParams, selectModel } from "../../store/slices/model";
 import ParameterConfigurator from "./ParameterConfigurator";
-import { StartModelTraining } from "../../services/apiFunctions";
+import {
+  StartModelTraining,
+  GetPipelineHealth,
+} from "../../services/apiFunctions";
+import Loader from "../loaders/Loader";
+import showToast from "../../utilities/ShowToast";
 
 const TrainingSetup = ({ openProgressPopup, onClose, setDeployedJob }) => {
   const dispatch = useDispatch();
   const { address } = useAccount();
-  const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
-  // const { selectedDataset, selectedFeatures } = useSelector(
-  //   (state) => state.dataset
-  // );
   const { models, selectedModel, parameters } = useSelector(
     (state) => state.model
   );
 
-  const [loading, setLoading] = useState();
+  const [loading, setLoading] = useState(false);
+  const [checking, setChecking] = useState(true);
+  const [pipelineReady, setPipelineReady] = useState(false);
+  const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
+
+  // Check pipeline health before showing setup
+  useEffect(() => {
+    const checkHealth = async () => {
+      try {
+        const status = await GetPipelineHealth();
+        if (status?.isHealthy) {
+          setPipelineReady(true);
+        } else {
+          showToast(
+            "error",
+            "Pipeline is not ready, Please try again later.",
+            "/assets/Toast/Error.svg"
+          );
+          onClose(); // close immediately if not ready
+        }
+      } catch (err) {
+        console.error("Health check failed:", err);
+        onClose();
+      } finally {
+        setChecking(false);
+      }
+    };
+
+    checkHealth();
+  }, [onClose]);
+
   const handleSubmit = async () => {
     setLoading(true);
-    console.log(
-      "Training started for model:",
-      selectedModel,
-      parameters[selectedModel]
-    );
     try {
       let payload = {
         model_type: selectedModel,
@@ -36,20 +62,35 @@ const TrainingSetup = ({ openProgressPopup, onClose, setDeployedJob }) => {
       };
 
       const response = await StartModelTraining(payload);
-      console.log("Training Response:", response);
       if (response?.status === 200) {
         setDeployedJob(response?.data);
+        showToast(
+          "success",
+          "Model training started successfully.",
+          "/assets/Toast/Success.svg"
+        );
         onClose();
         openProgressPopup();
-      } else {
       }
-      // onClose();
     } catch (error) {
       console.error("Submit Error", error);
     } finally {
       setLoading(false);
     }
   };
+
+  if (checking) {
+    return (
+      <div className="fixed flex flex-col gap-4 inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-50">
+        <Loader />
+        <div className="text-medium-opacity text-xs">
+          Checking pipeline health
+        </div>
+      </div>
+    );
+  }
+
+  if (!pipelineReady) return null;
 
   return (
     <div className="bg-black/5 backdrop-blur-[12px] fixed top-0 left-0 w-full h-full z-50 flex items-center justify-center">

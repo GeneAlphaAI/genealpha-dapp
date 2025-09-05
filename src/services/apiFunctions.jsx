@@ -2,7 +2,7 @@ import axios from "axios";
 const llamaAPI = process.env.DEFI_LLAMA_URL;
 const genealphaAPI = process.env.GENEALPHA_API_URL;
 const genealphaAgentAPI = process.env.GENEALPHA_AGENT_API;
-const genealphaTrainigAPI = process.env.GENEALPHA_TRAINING_API;
+const genealphaTrainingAPI = process.env.GENEALPHA_TRAINING_API;
 export async function GetPredictions(token) {
   try {
     if (token) {
@@ -102,7 +102,7 @@ export async function GetAgents(walletAddress) {
 
 export async function GetAllJobs(limit = 100, offset = 0, status = "") {
   try {
-    const response = await axios.get(`${genealphaTrainigAPI}/jobs/`, {
+    const response = await axios.get(`${genealphaTrainingAPI}/jobs/`, {
       params: {
         limit,
         offset,
@@ -125,7 +125,7 @@ export async function GetAllJobs(limit = 100, offset = 0, status = "") {
 export async function GetAllJobsStats() {
   try {
     const response = await axios.get(
-      `${genealphaTrainigAPI}/jobs/stats/summary`,
+      `${genealphaTrainingAPI}/jobs/stats/summary`,
       {
         headers: {
           accept: "application/json",
@@ -145,7 +145,7 @@ export async function GetAllJobsStats() {
 export async function CancelJob(jobId) {
   try {
     const response = await axios.delete(
-      `${genealphaTrainigAPI}/jobs/${jobId}`,
+      `${genealphaTrainingAPI}/jobs/${jobId}`,
       {
         headers: {
           accept: "application/json",
@@ -164,7 +164,7 @@ export async function CancelJob(jobId) {
 
 export async function GetJobStatus(jobId) {
   try {
-    const response = await axios.get(`${genealphaTrainigAPI}/jobs/${jobId}`, {
+    const response = await axios.get(`${genealphaTrainingAPI}/jobs/${jobId}`, {
       headers: {
         accept: "application/json",
       },
@@ -181,11 +181,14 @@ export async function GetJobStatus(jobId) {
 
 export async function GetAllModels() {
   try {
-    const response = await axios.get(`${genealphaTrainigAPI}/training/models`, {
-      headers: {
-        accept: "application/json",
-      },
-    });
+    const response = await axios.get(
+      `${genealphaTrainingAPI}/training/models`,
+      {
+        headers: {
+          accept: "application/json",
+        },
+      }
+    );
 
     if (response.status === 200) {
       return response.data;
@@ -199,7 +202,7 @@ export async function GetAllModels() {
 export async function StartModelTraining(payload) {
   try {
     const response = await axios.post(
-      `${genealphaTrainigAPI}/training/start`,
+      `${genealphaTrainingAPI}/training/start`,
       payload,
       {
         headers: {
@@ -214,5 +217,32 @@ export async function StartModelTraining(payload) {
   } catch (error) {
     console.error("Error fetching job stats:", error.message);
     return error?.response;
+  }
+}
+
+export async function GetPipelineHealth() {
+  try {
+    // Call both APIs in parallel
+    const [healthRes, readyRes] = await Promise.all([
+      axios.get(`${genealphaTrainingAPI}/health/`, {
+        headers: { accept: "application/json" },
+      }),
+      axios.get(`${genealphaTrainingAPI}/health/ready`, {
+        headers: { accept: "application/json" },
+      }),
+    ]);
+
+    const healthStatus = healthRes?.data?.status;
+    const readyStatus = readyRes?.data?.ready;
+
+    // Check conditions
+    if (healthStatus === "healthy" && readyStatus === true) {
+      return { isHealthy: true, health: healthRes.data, ready: readyRes.data };
+    } else {
+      return { isHealthy: false, health: healthRes.data, ready: readyRes.data };
+    }
+  } catch (error) {
+    console.error("Error fetching pipeline health:", error.message);
+    return { ok: false, error: error?.response?.data || error.message };
   }
 }
