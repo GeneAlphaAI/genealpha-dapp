@@ -16,6 +16,7 @@ const showToast = (type, message, icon) => {
     display: "flex",
     alignItems: "center",
   };
+  // Here is a comment
 
   const iconElement = icon ? (
     <img src={icon} alt="toast-icon" className="h-[28px] mr-3" />
