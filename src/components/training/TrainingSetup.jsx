@@ -12,7 +12,7 @@ import {
   GetPipelineHealth,
 } from "../../services/apiFunctions";
 import Loader from "../loaders/Loader";
-import showToast from "../../utilities/ShowToast";
+import showToast from "../../utilities/showToast";
 
 const TrainingSetup = ({ openProgressPopup, onClose, setDeployedJob }) => {
   const dispatch = useDispatch();
