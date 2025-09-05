@@ -13,6 +13,8 @@ import {
 } from "../../services/apiFunctions";
 import Loader from "../loaders/Loader";
 import showToast from "../../utilities/showToast";
+import { DatasetSchema } from "../../services/DatasetSchema";
+import { setSelectedDataset } from "../../store/slices/dataset";
 
 const TrainingSetup = ({ openProgressPopup, onClose, setDeployedJob }) => {
   const dispatch = useDispatch();
@@ -20,7 +22,8 @@ const TrainingSetup = ({ openProgressPopup, onClose, setDeployedJob }) => {
   const { models, selectedModel, parameters } = useSelector(
     (state) => state.model
   );
-
+  const { selectedDataset } = useSelector((state) => state.dataset);
+  console.log("Selected Model:", selectedDataset);
   const [loading, setLoading] = useState(false);
   const [checking, setChecking] = useState(true);
   const [pipelineReady, setPipelineReady] = useState(false);
@@ -170,7 +173,7 @@ const TrainingSetup = ({ openProgressPopup, onClose, setDeployedJob }) => {
         </Step>
 
         {/* Step 3 */}
-        {/* <Step
+        <Step
           title={"Select Dataset"}
           logo="/assets/training/Database.svg"
           disabled={false}
@@ -183,7 +186,7 @@ const TrainingSetup = ({ openProgressPopup, onClose, setDeployedJob }) => {
             value={selectedDataset}
             onSelect={(val) => dispatch(setSelectedDataset(val))}
           />
-        </Step> */}
+        </Step>
         {/* <Step
           title={"Select Features"}
           logo="/assets/training/Features.svg"
