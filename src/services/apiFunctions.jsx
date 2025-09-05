@@ -18,7 +18,7 @@ export async function GetPredictions(token) {
       );
 
       if (predictionResponse.status === 200) {
-        return predictionResponse?.data;
+        return predictionResponse;
       } else {
         return "No Project Found";
       }

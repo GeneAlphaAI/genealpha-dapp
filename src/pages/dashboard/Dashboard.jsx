@@ -55,6 +55,7 @@ const whitelist = [
 const Dashboard = () => {
   const [selectedModel, setSelectedModel] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null); // NEW
   const handleCardClick = (model) => {
     setSelectedModel(model);
   };
@@ -72,10 +73,13 @@ const Dashboard = () => {
 
   const GetLiveModels = async () => {
     setIsLoading(true);
+    setErrorMessage(null);
     try {
       const res = await GetPredictions(selectedToken);
-      const predictions = res?.predicted_price_next_hour || {};
-
+      const predictions = res?.data?.predicted_price_next_hour || {};
+      if (res?.status !== 200) {
+        setErrorMessage("Server error while fetching predictions.");
+      }
       const price = await GetEthPrice(
         "0xa93d86Af16fe83F064E3C0e2F3d129F7B7b002b0"
       );
@@ -100,8 +104,8 @@ const Dashboard = () => {
         .filter(Boolean);
 
       setLiveModels({
-        token: res?.token,
-        timestamp: res?.timestamp,
+        token: res?.data?.token,
+        timestamp: res?.data?.timestamp,
         models: transformedModels,
       });
     } catch (error) {
@@ -146,6 +150,15 @@ const Dashboard = () => {
       </div>
     );
   }
+
+  if (errorMessage !== null) {
+    return (
+      <div className="flex w-full h-full items-center justify-center">
+        <h1 className="text-inactive-text">{errorMessage}</h1>
+      </div>
+    );
+  }
+  console.log(errorMessage);
 
   return (
     <div className="flex flex-wrap gap-4">
