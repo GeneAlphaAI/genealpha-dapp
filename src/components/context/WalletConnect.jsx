@@ -52,7 +52,6 @@ export function AppKitProvider({ children }) {
     "--w3m-color-mix-strength": 20,
     "--w3m-border-radius-master": "1.5px",
     "--w3m-accent": "#bababd",
-    "--w3m-font-family": "'Inter', sans-serif",
   });
   return (
     <WagmiProvider config={wagmiAdapter.wagmiConfig}>
