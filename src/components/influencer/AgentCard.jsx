@@ -137,7 +137,7 @@ const AgentCard = ({
                       }}
                       className="bg-primary/40 cursor-pointer flex px-2 py-2 mt-2 rounded-[5px]  w-max"
                     >
-                      <span className="max-w-[36ch] text-xxs text-low-opacity truncate">
+                      <span className="max-w-[22ch] sm:max-w-[36ch] text-xxs text-low-opacity truncate">
                         {pred?.text}
                       </span>
 

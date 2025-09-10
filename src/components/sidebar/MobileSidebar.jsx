@@ -5,9 +5,13 @@ import Refresh from "../header/Refresh";
 import ModelStatus from "../header/ModelStatus";
 import { useDispatch, useSelector } from "react-redux";
 import { selectToken } from "../../store/slices/token";
+import useTokenBalance from "../../utilities/useTokenBalance";
 
 const MobileSidebar = ({ isOpen }) => {
   const location = useLocation();
+  const { balance } = useTokenBalance(
+    "0x5e6dd9a767894470e7e93e603c25f681a5adf1ae"
+  );
 
   const sidebarLinks = [
     {
@@ -20,6 +24,12 @@ const MobileSidebar = ({ isOpen }) => {
       label: "Infulencer Agent",
       pathname: "/influencer",
       image: "/assets/sidebar/InfluencerAgent.svg",
+      disabled: false,
+    },
+    {
+      label: "Training",
+      pathname: "/training",
+      image: "/assets/sidebar/Training.svg",
       disabled: false,
     },
     {
@@ -40,12 +50,6 @@ const MobileSidebar = ({ isOpen }) => {
       image: "/assets/sidebar/Bee.svg",
       disabled: true,
     },
-    {
-      label: "Training",
-      pathname: "/training",
-      image: "/assets/sidebar/Training.svg",
-      disabled: true,
-    },
   ];
 
   const { options, selectedToken } = useSelector((state) => state.token);
@@ -61,7 +65,9 @@ const MobileSidebar = ({ isOpen }) => {
         <h3 className="text-md font-jetbrains-mono text-low-opacity">
           GA Balance
         </h3>
-        <p className="text-lg font-jetbrains-mono">0</p>
+        <p className="text-lg font-jetbrains-mono">
+          {Number((Number(balance) / 10 ** 18).toFixed(3)) || 0}
+        </p>
       </div>
 
       <div className="border-b-[0.5px] border-stroke-gray pb-4">
