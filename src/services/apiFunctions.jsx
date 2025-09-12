@@ -246,3 +246,24 @@ export async function GetPipelineHealth() {
     return { ok: false, error: error?.response?.data || error.message };
   }
 }
+
+export async function DeleteAgent(address, name) {
+  try {
+    const response = await axios.delete(`${genealphaAgentAPI}/user/agent`, {
+      params: {
+        wallet_address: address,
+        agent_name: name,
+      },
+      headers: {
+        accept: "application/json",
+      },
+    });
+
+    if (response.status === 200) {
+      return response;
+    }
+  } catch (error) {
+    console.error("Error deleting", error.message);
+    return error?.response;
+  }
+}

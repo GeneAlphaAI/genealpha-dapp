@@ -13,6 +13,7 @@ import CategorySelector from "./CategorySelector";
 import CommonInput from "../form/CommonInput";
 import { CreateAgent } from "../../services/apiFunctions";
 import { useAccount } from "wagmi";
+import showToast from "../../utilities/showToast";
 
 const AgentSetup = ({ onClose }) => {
   const dispatch = useDispatch();

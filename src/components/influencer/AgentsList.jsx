@@ -2,18 +2,20 @@ import React, { useState } from "react";
 import PrimaryButton from "../buttons/PrimaryButton";
 import AgentCard from "./AgentCard";
 import AgentPopup from "./AgentPopup";
+import DeletePopup from "./DeletePopup";
 
 const AgentsList = ({ agents, addAgent }) => {
   const [selectedAgent, setSelectedAgent] = useState(null);
-
+  const [deletePopup, setDeletePopup] = useState(false);
+  const [editPopup, setEditPopup] = useState(false);
+  const [agentPopup, setAgentPopup] = useState(false);
+  const [agentName, setAgentName] = useState(null);
   const handleCardClick = (agent) => {
     setSelectedAgent(agent);
+    setAgentPopup(true);
   };
 
-  const closePopup = () => {
-    setSelectedAgent(null);
-  };
-
+  console.log("delete pop", deletePopup);
   return (
     <div className="w-full md:mx-2 flex flex-col gap-4">
       {/* Header */}
@@ -48,16 +50,30 @@ const AgentsList = ({ agents, addAgent }) => {
               profiles={agent?.combinedPrediction?.profiles}
               predictions={agent?.predictions}
               onClick={() => handleCardClick(agent)}
+              toggleEditPopup={(name) => setEditPopup(!editPopup)}
+              toggleDeletePopup={(name) => {
+                setDeletePopup(!deletePopup);
+                setAgentName(name);
+              }}
             />
           </>
         ))}
       </div>
 
       {/* Popup */}
-      {selectedAgent && (
+      {agentPopup && (
         <AgentPopup
           agent={selectedAgent}
-          onClose={() => setSelectedAgent(null)}
+          onClose={() => {
+            setSelectedAgent(null);
+            setAgentPopup(false);
+          }}
+        />
+      )}
+      {deletePopup && (
+        <DeletePopup
+          onClose={() => setDeletePopup(!deletePopup)}
+          agentName={agentName}
         />
       )}
     </div>
