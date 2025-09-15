@@ -248,6 +248,7 @@ export async function GetPipelineHealth() {
 }
 
 export async function DeleteAgent(address, name) {
+  console.log(name, address);
   try {
     const response = await axios.delete(`${genealphaAgentAPI}/user/agent`, {
       params: {
@@ -258,6 +259,27 @@ export async function DeleteAgent(address, name) {
         accept: "application/json",
       },
     });
+
+    if (response.status === 200) {
+      return response;
+    }
+  } catch (error) {
+    console.error("Error deleting", error.message);
+    return error?.response;
+  }
+}
+
+export async function UpdateAgent(payload) {
+  try {
+    const response = await axios.put(
+      `${genealphaAgentAPI}/user/agent/update`,
+      payload,
+      {
+        headers: {
+          accept: "application/json",
+        },
+      }
+    );
 
     if (response.status === 200) {
       return response;

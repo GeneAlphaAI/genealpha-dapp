@@ -138,6 +138,17 @@ const influencerSlice = createSlice({
     setDataUpdated: (state, action) => {
       state.dataUpdated = action.payload;
     },
+    addInfluencersFromAccounts: (state, action) => {
+      const accounts = action.payload;
+
+      const mapped = accounts.map((acc) => ({
+        ...acc.account_info, // spread all account_info fields at root
+        influence: acc.influence ?? 0,
+      }));
+      console.log("influencers", [...state.selectedInfluencers, ...mapped]);
+      state.selectedInfluencers = [...state.selectedInfluencers, ...mapped];
+    },
+
     resetInfluencerState: () => initialState,
   },
 });
@@ -152,5 +163,6 @@ export const {
   setAgentName,
   resetInfluencerState,
   setDataUpdated,
+  addInfluencersFromAccounts,
 } = influencerSlice.actions;
 export default influencerSlice.reducer;

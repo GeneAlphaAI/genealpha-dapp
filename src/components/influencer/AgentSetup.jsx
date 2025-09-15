@@ -46,7 +46,11 @@ const AgentSetup = ({ onClose }) => {
       }
     } catch (error) {
       console.error("Submit Error", error);
-      showToast("error", "Agent Setup Successful", "/assets/Toast/Error.svg");
+      showToast(
+        "error",
+        "Unusal Error Occured While Setup",
+        "/assets/Toast/Error.svg"
+      );
     } finally {
       setLoading(false);
     }

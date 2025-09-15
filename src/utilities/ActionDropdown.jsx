@@ -43,7 +43,7 @@ const ActionDropdown = ({
 
       <DropdownMenu.Portal>
         <DropdownMenu.Content
-          className={`z-[10000] p-2 rounded-sm shadow-lg bg-neutral-900 min-w-[5rem] ${contentClassName}`}
+          className={`z-[10000] p-2 rounded-sm shadow-lg bg-neutral-900 min-w-[6rem] ${contentClassName}`}
           align="end"
         >
           {items.map((item, idx) => (
@@ -56,9 +56,17 @@ const ActionDropdown = ({
                 setOpen(false);
                 setIsOpen?.(false);
               }}
-              className={`px-2 py-1 text-white outline-0 hover:bg-white/10 transition-colors cursor-pointer rounded-sm ${itemClassName}`}
+              className={`flex items-center gap-2 px-3 py-1 rounded-sm cursor-pointer outline-0 transition-colors hover:bg-white/5 ${itemClassName}`}
+              style={{ color: item.color || "white" }}
             >
-              {item.label}
+              {item.icon && (
+                <img
+                  src={item.icon}
+                  alt=""
+                  className="size-[18px] object-contain"
+                />
+              )}
+              <span>{item.label}</span>
             </DropdownMenu.Item>
           ))}
         </DropdownMenu.Content>

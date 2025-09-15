@@ -76,12 +76,15 @@ const AgentCard = ({
               action: () => {
                 toggleEditPopup(name);
               },
+              icon: "/assets/dropdown/Edit.svg",
             },
             {
               label: "Delete",
               action: () => {
                 toggleDeletePopup(name);
               },
+              icon: "/assets/dropdown/Delete-red.svg",
+              color: "#E44343",
             },
           ]}
           setIsOpen={setDropdownOpen}

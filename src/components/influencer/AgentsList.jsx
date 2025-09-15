@@ -3,19 +3,26 @@ import PrimaryButton from "../buttons/PrimaryButton";
 import AgentCard from "./AgentCard";
 import AgentPopup from "./AgentPopup";
 import DeletePopup from "./DeletePopup";
+import EditPopup from "./EditPopup";
+import { useDispatch } from "react-redux";
+import {
+  addInfluencersFromAccounts,
+  resetInfluencerState,
+  setAgentName,
+} from "../../store/slices/influencer";
 
 const AgentsList = ({ agents, addAgent }) => {
   const [selectedAgent, setSelectedAgent] = useState(null);
   const [deletePopup, setDeletePopup] = useState(false);
   const [editPopup, setEditPopup] = useState(false);
   const [agentPopup, setAgentPopup] = useState(false);
-  const [agentName, setAgentName] = useState(null);
+  const [name, setName] = useState(null);
+  const dispatch = useDispatch();
   const handleCardClick = (agent) => {
     setSelectedAgent(agent);
     setAgentPopup(true);
   };
 
-  console.log("delete pop", deletePopup);
   return (
     <div className="w-full md:mx-2 flex flex-col gap-4">
       {/* Header */}
@@ -50,10 +57,16 @@ const AgentsList = ({ agents, addAgent }) => {
               profiles={agent?.combinedPrediction?.profiles}
               predictions={agent?.predictions}
               onClick={() => handleCardClick(agent)}
-              toggleEditPopup={(name) => setEditPopup(!editPopup)}
+              toggleEditPopup={() => {
+                console.log(agent);
+                setEditPopup(!editPopup);
+                dispatch(addInfluencersFromAccounts(agent?.accounts));
+                dispatch(setAgentName(agent?.agent));
+                setSelectedAgent(agent);
+              }}
               toggleDeletePopup={(name) => {
                 setDeletePopup(!deletePopup);
-                setAgentName(name);
+                setName(name);
               }}
             />
           </>
@@ -73,7 +86,16 @@ const AgentsList = ({ agents, addAgent }) => {
       {deletePopup && (
         <DeletePopup
           onClose={() => setDeletePopup(!deletePopup)}
-          agentName={agentName}
+          agentName={name}
+        />
+      )}
+      {editPopup && (
+        <EditPopup
+          onClose={() => {
+            setEditPopup(false);
+            dispatch(resetInfluencerState());
+          }}
+          agent={selectedAgent}
         />
       )}
     </div>
