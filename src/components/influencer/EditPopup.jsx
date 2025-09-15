@@ -106,7 +106,7 @@ const EditPopup = ({ onClose, agent }) => {
       if (response?.status == 200) {
         showToast(
           "success",
-          "Agent Setup Successful",
+          "Agent Updated Successfully",
           "/assets/Toast/Success.svg"
         );
       }
@@ -119,7 +119,8 @@ const EditPopup = ({ onClose, agent }) => {
       );
     } finally {
       setLoading(false);
-      // dispatch(resetInfluencerState());
+      dispatch(resetInfluencerState());
+      onClose();
     }
   };
   useEffect(() => {
