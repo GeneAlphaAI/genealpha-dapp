@@ -72,7 +72,7 @@ const AgentCard = ({
         <ActionDropdown
           items={[
             {
-              label: "Edit",
+              label: "Update",
               action: () => {
                 toggleEditPopup(name);
               },
