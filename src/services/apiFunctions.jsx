@@ -246,3 +246,46 @@ export async function GetPipelineHealth() {
     return { ok: false, error: error?.response?.data || error.message };
   }
 }
+
+export async function DeleteAgent(address, name) {
+  console.log(name, address);
+  try {
+    const response = await axios.delete(`${genealphaAgentAPI}/user/agent`, {
+      params: {
+        wallet_address: address,
+        agent_name: name,
+      },
+      headers: {
+        accept: "application/json",
+      },
+    });
+
+    if (response.status === 200) {
+      return response;
+    }
+  } catch (error) {
+    console.error("Error deleting", error.message);
+    return error?.response;
+  }
+}
+
+export async function UpdateAgent(payload) {
+  try {
+    const response = await axios.put(
+      `${genealphaAgentAPI}/user/agent/update`,
+      payload,
+      {
+        headers: {
+          accept: "application/json",
+        },
+      }
+    );
+
+    if (response.status === 200) {
+      return response;
+    }
+  } catch (error) {
+    console.error("Error deleting", error.message);
+    return error?.response;
+  }
+}

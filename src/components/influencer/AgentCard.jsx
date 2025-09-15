@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import ActionDropdown from "../../utilities/ActionDropdown";
 
 const AgentCard = ({
   onClick,
@@ -7,10 +8,13 @@ const AgentCard = ({
   combinedPrediction,
   profiles,
   predictions,
+  toggleEditPopup,
+  toggleDeletePopup,
 }) => {
   const [isAtBottom, setIsAtBottom] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const scrollRef = useRef(null);
-  console.log("Rendering AgentCard with:", combinedPrediction);
+
   // Background color based on category
   const getBgColor = (category) => {
     switch (category) {
@@ -51,18 +55,40 @@ const AgentCard = ({
       className={`bg-white/2 border-1 space-y-3 border-stroke-gray rounded-[10px] flex flex-col cursor-pointer w-full h-[400px] xl:max-w-[500px] 2xl:min-w-[450px] 2xl:max-w-[450px] px-6 py-4`}
       onClick={() => {
         if (predictions?.length > 0) {
-          onClick();
+          if (!dropdownOpen && predictions?.length > 0) {
+            onClick();
+          }
         }
       }}
     >
       {/* Header */}
-      <div className="space-y-2">
+      <div className="space-y-2 flex justify-between items-center">
         <div className="flex items-center gap-3">
           <h2 className="text-md font-medium">{name}</h2>
           <div className="bg-white/4 text-inactive-text px-4 font-medium font-jetbrains-mono text-xs uppercase flex items-center justify-center rounded-[5px] h-max p-1">
             {sources?.length} sources
           </div>
         </div>
+        <ActionDropdown
+          items={[
+            {
+              label: "Update",
+              action: () => {
+                toggleEditPopup(name);
+              },
+              icon: "/assets/dropdown/Edit.svg",
+            },
+            {
+              label: "Delete",
+              action: () => {
+                toggleDeletePopup(name);
+              },
+              icon: "/assets/dropdown/Delete-red.svg",
+              color: "#E44343",
+            },
+          ]}
+          setIsOpen={setDropdownOpen}
+        />
       </div>
 
       {/* Combined Prediction */}

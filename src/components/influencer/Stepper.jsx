@@ -28,19 +28,19 @@ export default function Stepper({
 
   const activeStep = stepsArray[currentStep];
   const isSubStepActive =
-    activeStep?.props.showSubStep && activeStep?.props.subStep;
+    activeStep?.props?.showSubStep && activeStep?.props.subStep;
 
   const stepTitle = isSubStepActive
-    ? activeStep.props.subStep.props?.title || activeStep.props.title
-    : activeStep.props.title;
+    ? activeStep.props?.subStep?.props?.title || activeStep?.props?.title
+    : activeStep?.props?.title;
 
   const stepDescription = isSubStepActive
-    ? activeStep.props.subStep.props?.description ||
+    ? activeStep.props?.subStep.props?.description ||
       activeStep.props.description
     : activeStep.props.description;
 
   const stepLogo = isSubStepActive
-    ? activeStep.props.subStep.props?.logo || activeStep.props.logo
+    ? activeStep.props?.subStep.props?.logo || activeStep.props.logo
     : activeStep.props.logo;
 
   const updateStep = (newStep) => {

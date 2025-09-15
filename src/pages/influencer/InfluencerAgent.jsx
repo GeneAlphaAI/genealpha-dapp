@@ -8,6 +8,8 @@ import { useAccount } from "wagmi";
 import { addPredictionsToAgents } from "../../utilities/helpers";
 import ConnectWalletPlaceholder from "../../components/connect/ConnectWalletPlaceholder";
 import useTokenBalance from "../../utilities/useTokenBalance";
+import { useDispatch, useSelector } from "react-redux";
+import { setDataUpdated } from "../../store/slices/influencer";
 const whitelist = [
   "0xB4DC7980B7b54a96003285C7390da53F739459Ec",
   "0xDc1427D281F26E48d8c136bCeEd363Df2b91A205",
@@ -24,6 +26,8 @@ const InfluencerAgent = () => {
   const { balance, isFetched } = useTokenBalance(
     "0x5e6dd9a767894470e7e93e603c25f681a5adf1ae"
   );
+  const dispatch = useDispatch();
+  const { dataUpdated } = useSelector((s) => s.influencer);
   const isWhitelisted = (addr) =>
     addr && whitelist.map((a) => a.toLowerCase()).includes(addr.toLowerCase());
   // 🔹 Fetch agents from API
@@ -42,12 +46,13 @@ const InfluencerAgent = () => {
       setAgents([]); // fallback empty
     } finally {
       setLoading(false);
+      dispatch(setDataUpdated(false));
     }
   };
 
   useEffect(() => {
     fetchAgents();
-  }, []);
+  }, [dataUpdated]);
 
   const hasRequiredBalance =
     Number((Number(balance) / 10 ** 18).toFixed(3)) >= 50000;

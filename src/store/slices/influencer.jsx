@@ -1,15 +1,16 @@
 // store/influencer.js
 import { createSlice } from "@reduxjs/toolkit";
-
+const initialState = {
+  searchInput: "",
+  selectedInfluencers: [],
+  searchResults: null,
+  selectedCategories: [],
+  agentName: "",
+  dataUpdated: false,
+};
 const influencerSlice = createSlice({
   name: "influencer",
-  initialState: {
-    searchInput: "",
-    selectedInfluencers: [],
-    searchResults: null,
-    selectedCategories: [],
-    agentName: "",
-  },
+  initialState,
   reducers: {
     setSearchInput: (state, action) => {
       state.searchInput = action.payload;
@@ -134,6 +135,20 @@ const influencerSlice = createSlice({
     setAgentName: (state, action) => {
       state.agentName = action.payload;
     },
+    setDataUpdated: (state, action) => {
+      state.dataUpdated = action.payload;
+    },
+    addInfluencersFromAccounts: (state, action) => {
+      const accounts = action.payload;
+
+      const mapped = accounts.map((acc) => ({
+        ...acc.account_info, // spread all account_info fields at root
+        influence: acc.influence ?? 0,
+      }));
+      console.log("influencers", [...state.selectedInfluencers, ...mapped]);
+      state.selectedInfluencers = [...state.selectedInfluencers, ...mapped];
+    },
+
     resetInfluencerState: () => initialState,
   },
 });
@@ -147,5 +162,7 @@ export const {
   setSelectedCategories,
   setAgentName,
   resetInfluencerState,
+  setDataUpdated,
+  addInfluencersFromAccounts,
 } = influencerSlice.actions;
 export default influencerSlice.reducer;

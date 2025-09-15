@@ -2,16 +2,25 @@ import React, { useState } from "react";
 import PrimaryButton from "../buttons/PrimaryButton";
 import AgentCard from "./AgentCard";
 import AgentPopup from "./AgentPopup";
+import DeletePopup from "./DeletePopup";
+import EditPopup from "./EditPopup";
+import { useDispatch } from "react-redux";
+import {
+  addInfluencersFromAccounts,
+  resetInfluencerState,
+  setAgentName,
+} from "../../store/slices/influencer";
 
 const AgentsList = ({ agents, addAgent }) => {
   const [selectedAgent, setSelectedAgent] = useState(null);
-
+  const [deletePopup, setDeletePopup] = useState(false);
+  const [editPopup, setEditPopup] = useState(false);
+  const [agentPopup, setAgentPopup] = useState(false);
+  const [name, setName] = useState(null);
+  const dispatch = useDispatch();
   const handleCardClick = (agent) => {
     setSelectedAgent(agent);
-  };
-
-  const closePopup = () => {
-    setSelectedAgent(null);
+    setAgentPopup(true);
   };
 
   return (
@@ -48,16 +57,45 @@ const AgentsList = ({ agents, addAgent }) => {
               profiles={agent?.combinedPrediction?.profiles}
               predictions={agent?.predictions}
               onClick={() => handleCardClick(agent)}
+              toggleEditPopup={() => {
+                console.log(agent);
+                setEditPopup(!editPopup);
+                dispatch(addInfluencersFromAccounts(agent?.accounts));
+                dispatch(setAgentName(agent?.agent));
+                setSelectedAgent(agent);
+              }}
+              toggleDeletePopup={(name) => {
+                setDeletePopup(!deletePopup);
+                setName(name);
+              }}
             />
           </>
         ))}
       </div>
 
       {/* Popup */}
-      {selectedAgent && (
+      {agentPopup && (
         <AgentPopup
           agent={selectedAgent}
-          onClose={() => setSelectedAgent(null)}
+          onClose={() => {
+            setSelectedAgent(null);
+            setAgentPopup(false);
+          }}
+        />
+      )}
+      {deletePopup && (
+        <DeletePopup
+          onClose={() => setDeletePopup(!deletePopup)}
+          agentName={name}
+        />
+      )}
+      {editPopup && (
+        <EditPopup
+          onClose={() => {
+            setEditPopup(false);
+            dispatch(resetInfluencerState());
+          }}
+          agent={selectedAgent}
         />
       )}
     </div>
