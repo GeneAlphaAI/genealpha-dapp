@@ -109,7 +109,9 @@ const AgentCard = ({
               ))}
             </div>
           </div>
-          <p className="text-xs text-primary-text">{combinedPrediction}</p>
+          <p className="text-xs text-primary-text line-clamp-3">
+            {combinedPrediction}
+          </p>
         </div>
       )}
 
