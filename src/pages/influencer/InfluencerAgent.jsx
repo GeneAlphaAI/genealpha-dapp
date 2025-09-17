@@ -17,6 +17,8 @@ const whitelist = [
   "0x82f936748318149331B2CFE6e9deE8ba37647063",
   "0xc79198cb232a77e425E02E4fd1c921DC154C968E",
   "0xF935d0A213c2eE0Cbbc5638994b8e0E3cF2F7a93",
+  "0x867c228764E044D09B6686068B6031376db62e70",
+  "0xEA688fDf236d28D896f6a59Bb56e3Fb184621aC0",
 ];
 const InfluencerAgent = () => {
   const [isOpen, setIsOpen] = useState(false);
