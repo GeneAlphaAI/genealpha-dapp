@@ -39,7 +39,8 @@ const InfluencerAgent = () => {
       const response = await GetAgents(address);
 
       if (response?.status === 200) {
-        let updatedAgents = addPredictionsToAgents(response?.data?.agents);
+        console.log(response);
+        let updatedAgents = addPredictionsToAgents(response?.data?.data);
 
         setAgents(updatedAgents);
       }
@@ -55,6 +56,7 @@ const InfluencerAgent = () => {
   useEffect(() => {
     fetchAgents();
   }, [dataUpdated]);
+  console.log(dataUpdated);
 
   const hasRequiredBalance =
     Number((Number(balance) / 10 ** 18).toFixed(3)) >= 50000;

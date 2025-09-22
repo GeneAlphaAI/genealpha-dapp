@@ -66,6 +66,7 @@ export default function ExpandingSearchBar() {
     try {
       const response = await SearchInfluencer(searchInput.trim());
       if (response?.status === 200 && response?.data) {
+        console.log(response);
         dispatch(setSearchResults(response?.data?.data)); // store object
       } else {
         dispatch(setSearchResults(null));

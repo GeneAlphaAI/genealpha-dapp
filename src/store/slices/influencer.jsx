@@ -136,6 +136,7 @@ const influencerSlice = createSlice({
       state.agentName = action.payload;
     },
     setDataUpdated: (state, action) => {
+      console.log(action);
       state.dataUpdated = action.payload;
     },
     addInfluencersFromAccounts: (state, action) => {
