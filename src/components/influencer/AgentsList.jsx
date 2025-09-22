@@ -93,7 +93,6 @@ const AgentsList = ({ agents, addAgent }) => {
         <EditPopup
           onClose={() => {
             setEditPopup(false);
-            dispatch(resetInfluencerState());
           }}
           agent={selectedAgent}
         />

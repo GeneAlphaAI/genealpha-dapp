@@ -8,6 +8,7 @@ import {
   removeInfluencer,
   resetInfluencerState,
   setAgentName,
+  setDataUpdated,
 } from "../../store/slices/influencer";
 import { useDispatch, useSelector } from "react-redux";
 import { useAccount } from "wagmi";
@@ -97,18 +98,22 @@ const EditPopup = ({ onClose, agent }) => {
     try {
       const payload = buildUpdatePayload();
       const keys = Object.keys(payload);
+      console.log(payload);
       if (keys.length <= 2) {
         showToast("error", "No changes detected", "/assets/Toast/Error.svg");
         return;
       }
       console.log(payload);
       const response = await UpdateAgent(payload);
+      console.log(response);
       if (response?.status == 200) {
         showToast(
           "success",
           "Agent Updated Successfully",
           "/assets/Toast/Success.svg"
         );
+        console.log("I am here");
+        dispatch(setDataUpdated(true));
       }
     } catch (error) {
       console.log(error);
@@ -119,23 +124,25 @@ const EditPopup = ({ onClose, agent }) => {
       );
     } finally {
       setLoading(false);
-      dispatch(resetInfluencerState());
       onClose();
+      setTimeout(() => {
+        dispatch(resetInfluencerState());
+      }, 1000);
     }
   };
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (popupRef.current && !popupRef.current.contains(event.target)) {
-        onClose();
-        dispatch(resetInfluencerState());
-      }
-    };
+  // useEffect(() => {
+  //   const handleClickOutside = (event) => {
+  //     if (popupRef.current && !popupRef.current.contains(event.target)) {
+  //       onClose();
+  //       dispatch(resetInfluencerState());
+  //     }
+  //   };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [onClose]);
+  //   document.addEventListener("mousedown", handleClickOutside);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   };
+  // }, [onClose]);
   return (
     <div className="bg-black/5 backdrop-blur-[12px] fixed top-0 left-0 w-full h-full z-50 flex items-center justify-center">
       <div ref={popupRef}>
@@ -145,7 +152,10 @@ const EditPopup = ({ onClose, agent }) => {
           onFinalStepCompleted={handleSubmit}
           backButtonText="Previous"
           nextButtonText="Next"
-          onClose={onClose}
+          onClose={() => {
+            onClose();
+            dispatch(resetInfluencerState());
+          }}
         >
           <Step
             title={"Update Influencers"}
