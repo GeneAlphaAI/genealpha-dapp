@@ -162,13 +162,16 @@ export async function CancelJob(jobId) {
   }
 }
 
-export async function GetJobStatus(jobId) {
+export async function GetJobStatus(address, jobId) {
   try {
-    const response = await axios.get(`${genealphaTrainingAPI}/jobs/${jobId}`, {
-      headers: {
-        accept: "application/json",
-      },
-    });
+    const response = await axios.get(
+      `${genealphaTrainingAPI}/jobs/${jobId}?user_id=${address}`,
+      {
+        headers: {
+          accept: "application/json",
+        },
+      }
+    );
 
     if (response.status === 200) {
       return response.data;
