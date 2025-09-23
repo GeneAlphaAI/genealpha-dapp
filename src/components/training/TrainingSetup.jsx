@@ -59,9 +59,10 @@ const TrainingSetup = ({ openProgressPopup, onClose, setDeployedJob }) => {
     setLoading(true);
     try {
       let payload = {
+        user_id: address,
         model_type: selectedModel,
         dataset: "sample",
-        config: parameters[selectedModel],
+        hyperparameters: parameters[selectedModel],
       };
 
       const response = await StartModelTraining(payload);

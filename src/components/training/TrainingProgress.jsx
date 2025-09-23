@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { GetJobStatus } from "../../services/apiFunctions";
+import { useAccount } from "wagmi";
 
 const TrainingProgress = ({
   progress: initialProgress,
@@ -7,6 +8,7 @@ const TrainingProgress = ({
   isInsideCard = false,
   jobId,
 }) => {
+  const { address } = useAccount();
   const [progress, setProgress] = useState(initialProgress ?? 0);
   const [status, setStatus] = useState(initialStatus ?? "pending");
   const [animatedWidth, setAnimatedWidth] = useState(initialProgress ?? 0);
@@ -27,7 +29,7 @@ const TrainingProgress = ({
     let interval;
 
     const fetchStatus = async () => {
-      const res = await GetJobStatus(jobId);
+      const res = await GetJobStatus(address, jobId);
       if (res) {
         console.log(jobId, res);
         setProgress(res.progress ?? 0);
