@@ -48,7 +48,7 @@ function App() {
               <Route path="/swarm" element={<SwarmDAO />} />
               <Route path="/influencer" element={<InfluencerAgent />} />
               <Route path="/training" element={<WorkInProgress />} />
-              <Route path="/profile" element={<Profile />} />
+              {/* <Route path="/profile" element={<Profile />} /> */}
               <Route path="*" element={<Navigate to={"/"} />} />
             </Routes>
           )}
