@@ -12,6 +12,7 @@ import { useAccount } from "wagmi";
 import ConnectWalletPlaceholder from "./components/connect/ConnectWalletPlaceholder";
 import Training from "./pages/training/Training";
 import Profile from "./pages/profile/Profile";
+import WorkInProgress from "./components/training/WorkInProgress";
 
 function App() {
   const location = useLocation();
@@ -46,7 +47,7 @@ function App() {
               <Route path="/breeding" element={<Breeding />} />
               <Route path="/swarm" element={<SwarmDAO />} />
               <Route path="/influencer" element={<InfluencerAgent />} />
-              <Route path="/training" element={<Training />} />
+              <Route path="/training" element={<WorkInProgress />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="*" element={<Navigate to={"/"} />} />
             </Routes>
