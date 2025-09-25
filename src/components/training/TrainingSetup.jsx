@@ -61,12 +61,13 @@ const TrainingSetup = ({ openProgressPopup, onClose, setDeployedJob }) => {
       let payload = {
         user_id: address,
         model_type: selectedModel,
-        dataset: "sample",
+        dataset: selectedDataset,
         hyperparameters: parameters[selectedModel],
       };
 
       const response = await StartModelTraining(payload);
-      if (response?.status === 200) {
+      console.log("Training Start Response:", response);
+      if (response?.status === 202) {
         setDeployedJob(response?.data);
         showToast(
           "success",

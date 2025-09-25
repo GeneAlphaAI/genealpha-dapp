@@ -23,12 +23,19 @@ const Sidebar = () => {
       image: "/assets/sidebar/Training.svg",
       disabled: false,
     },
+    // {
+    //   label: "My Profile",
+    //   pathname: "/profile",
+    //   image: "/assets/sidebar/User.svg",
+    //   disabled: false,
+    // },
     {
       label: "Leaderboard",
       pathname: "/leaderboard",
       image: "/assets/sidebar/Trophy.svg",
       disabled: true,
     },
+
     {
       label: "Breeding",
       pathname: "/breeding",

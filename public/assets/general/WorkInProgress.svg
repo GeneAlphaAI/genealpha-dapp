@@ -1,0 +1,17 @@
+<svg width="55" height="56" viewBox="0 0 55 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M28.6459 17.6875H17.1875L1.14587 33.7292H12.6042L28.6459 17.6875Z" fill="#686870"/>
+<path d="M51.5625 17.6875H40.1042L24.0625 33.7292H35.5208L51.5625 17.6875Z" fill="#686870"/>
+<path d="M14.8958 7.375V11.9583L10.3125 15.3958L5.72913 11.9583L14.8958 7.375Z" fill="#686870"/>
+<path d="M46.9792 7.375V11.9583L42.3958 15.3958L37.8125 11.9583L46.9792 7.375Z" fill="#686870"/>
+<path d="M51.5625 17.6875H1.14587V33.7292H51.5625V17.6875Z" stroke="#686870" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M10.3125 33.729V54.354" stroke="#686870" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M5.72913 54.354H14.8958" stroke="#686870" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M42.3959 33.729V54.354" stroke="#686870" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M46.9792 54.354H37.8125" stroke="#686870" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1.14587 33.7292L17.1875 17.6875" stroke="#686870" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M12.6041 33.7292L28.6458 17.6875" stroke="#686870" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M24.0625 33.7292L40.1042 17.6875" stroke="#686870" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M35.5209 33.7292L51.5625 17.6875" stroke="#686870" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M46.9792 11.9583L42.3958 15.3958L37.8125 11.9583V7.375L42.3958 3.9375L46.9792 7.375V11.9583Z" stroke="#686870" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M14.8958 11.9583L10.3125 15.3958L5.72913 11.9583V7.375L10.3125 3.9375L14.8958 7.375V11.9583Z" stroke="#686870" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
