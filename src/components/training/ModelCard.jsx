@@ -15,7 +15,7 @@ const ModelCard = ({
   const handleCancel = async () => {
     const res = await CancelJob(id);
     if (res?.status === 200) {
-      console.log("Job cancelled:", res);
+      // console.log("Job cancelled:", res);
       // notify parent so it can remove or refresh
       onJobCancelled?.(id);
     } else {

@@ -23,7 +23,7 @@ const TrainingSetup = ({ openProgressPopup, onClose, setDeployedJob }) => {
     (state) => state.model
   );
   const { selectedDataset } = useSelector((state) => state.dataset);
-  console.log("Selected Model:", selectedDataset);
+
   const [loading, setLoading] = useState(false);
   const [checking, setChecking] = useState(true);
   const [pipelineReady, setPipelineReady] = useState(false);
@@ -78,7 +78,7 @@ const TrainingSetup = ({ openProgressPopup, onClose, setDeployedJob }) => {
       };
 
       const response = await StartModelTraining(payload);
-      console.log("Training Start Response:", response);
+
       if (response?.status === 202) {
         setDeployedJob(response?.data);
         showToast(

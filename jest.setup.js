@@ -1,7 +1,5 @@
 import "@testing-library/jest-dom";
 
-console.log("Jest setup file loaded!");
-
 import { TextEncoder, TextDecoder } from "util";
 
 Object.assign(global, { TextDecoder, TextEncoder });

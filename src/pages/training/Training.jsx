@@ -32,7 +32,7 @@ const Training = () => {
     try {
       setLoading(true);
       const response = await GetAllJobs(address);
-      console.log("Jobs Response:", response);
+
       if (response?.status === 200) {
         setJobs(response?.data?.jobs || []);
       }
