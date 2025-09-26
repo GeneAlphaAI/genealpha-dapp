@@ -23,7 +23,7 @@ const TrainingSetup = ({ openProgressPopup, onClose, setDeployedJob }) => {
     (state) => state.model
   );
   const { selectedDataset } = useSelector((state) => state.dataset);
-  console.log("Selected Model:", selectedDataset);
+
   const [loading, setLoading] = useState(false);
   const [checking, setChecking] = useState(true);
   const [pipelineReady, setPipelineReady] = useState(false);
@@ -62,11 +62,23 @@ const TrainingSetup = ({ openProgressPopup, onClose, setDeployedJob }) => {
         user_id: address,
         model_type: selectedModel,
         dataset: selectedDataset,
+        features: [
+          "buy_count",
+          "sell_count",
+          "active_address_count",
+          "avg_token_price_usd",
+          "token_volume",
+          "token_volume_usd",
+          "eth_price_usd",
+          "btc_price_usd",
+          "momentum",
+        ],
+        target_column: "eth_price_usd",
         hyperparameters: parameters[selectedModel],
       };
 
       const response = await StartModelTraining(payload);
-      console.log("Training Start Response:", response);
+
       if (response?.status === 202) {
         setDeployedJob(response?.data);
         showToast(

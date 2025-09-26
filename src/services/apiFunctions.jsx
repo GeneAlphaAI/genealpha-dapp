@@ -220,7 +220,6 @@ export async function StartModelTraining(payload) {
       },
     }
   );
-  console.log(response);
 
   return response;
 }
@@ -253,7 +252,6 @@ export async function GetPipelineHealth() {
 }
 
 export async function DeleteAgent(address, name) {
-  console.log(name, address);
   try {
     const response = await axios.delete(`${genealphaAgentAPI}/user/agent`, {
       params: {

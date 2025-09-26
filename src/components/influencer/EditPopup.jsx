@@ -98,25 +98,24 @@ const EditPopup = ({ onClose, agent }) => {
     try {
       const payload = buildUpdatePayload();
       const keys = Object.keys(payload);
-      console.log(payload);
+
       if (keys.length <= 2) {
         showToast("error", "No changes detected", "/assets/Toast/Error.svg");
         return;
       }
-      console.log(payload);
+
       const response = await UpdateAgent(payload);
-      console.log(response);
+
       if (response?.status == 200) {
         showToast(
           "success",
           "Agent Updated Successfully",
           "/assets/Toast/Success.svg"
         );
-        console.log("I am here");
+
         dispatch(setDataUpdated(true));
       }
     } catch (error) {
-      console.log(error);
       showToast(
         "error",
         "Unusal Error Occured During Update",

@@ -14,7 +14,7 @@ const DeletePopup = ({ onClose, agentName }) => {
     setLoading(true);
     try {
       const response = await DeleteAgent(address, agentName);
-      console.log("HERE", loading);
+
       if (response?.status === 200) {
         showToast(
           "success",

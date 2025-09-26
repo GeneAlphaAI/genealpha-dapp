@@ -14,7 +14,7 @@ const Profile = () => {
     try {
       setLoading(true);
       const response = await GetAllJobs();
-      console.log("Jobs Response:", response);
+
       if (response?.status === 200) {
         setJobs(response?.data?.jobs || []);
       }

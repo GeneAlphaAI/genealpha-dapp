@@ -136,7 +136,6 @@ const influencerSlice = createSlice({
       state.agentName = action.payload;
     },
     setDataUpdated: (state, action) => {
-      console.log(action);
       state.dataUpdated = action.payload;
     },
     addInfluencersFromAccounts: (state, action) => {
@@ -146,7 +145,7 @@ const influencerSlice = createSlice({
         ...acc.account_info, // spread all account_info fields at root
         influence: acc.influence ?? 0,
       }));
-      console.log("influencers", [...state.selectedInfluencers, ...mapped]);
+
       state.selectedInfluencers = [...state.selectedInfluencers, ...mapped];
     },
 

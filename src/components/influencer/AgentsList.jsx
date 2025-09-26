@@ -58,7 +58,6 @@ const AgentsList = ({ agents, addAgent }) => {
               predictions={agent?.predictions}
               onClick={() => handleCardClick(agent)}
               toggleEditPopup={() => {
-                console.log(agent);
                 setEditPopup(!editPopup);
                 dispatch(addInfluencersFromAccounts(agent?.accounts));
                 dispatch(setAgentName(agent?.agent));

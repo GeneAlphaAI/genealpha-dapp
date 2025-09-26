@@ -160,7 +160,6 @@ const Dashboard = () => {
       </div>
     );
   }
-  console.log(errorMessage);
 
   return (
     <div className="flex flex-wrap gap-4">
