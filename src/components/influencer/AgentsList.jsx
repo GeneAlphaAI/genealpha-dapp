@@ -7,7 +7,6 @@ import EditPopup from "./EditPopup";
 import { useDispatch } from "react-redux";
 import {
   addInfluencersFromAccounts,
-  resetInfluencerState,
   setAgentName,
 } from "../../store/slices/influencer";
 

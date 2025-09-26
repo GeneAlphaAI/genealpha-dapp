@@ -47,6 +47,7 @@ const AgentPopup = ({ onClose, agent }) => {
 
   return (
     <div
+      data-testid="agent-popup-backdrop"
       className="bg-black/5 backdrop-blur-[12px] fixed top-0 left-0 w-full h-full z-50 flex items-center justify-center"
       onClick={handleBackdropClick}
     >
