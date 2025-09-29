@@ -29,6 +29,7 @@ const FrameProgress = ({ progress, timeLeft }) => {
       </div>
       <div className="w-full h-1 bg-white/10 overflow-hidden rounded-full">
         <div
+          data-testid="progress-bar"
           className="h-full transition-all rounded-full duration-300"
           style={{
             width: `${progress}%`,
