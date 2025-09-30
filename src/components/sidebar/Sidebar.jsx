@@ -12,7 +12,7 @@ const Sidebar = () => {
       disabled: false,
     },
     {
-      label: "Infulencer Agent",
+      label: "Influencer Agent",
       pathname: "/influencer",
       image: "/assets/sidebar/InfluencerAgent.svg",
       disabled: false,
