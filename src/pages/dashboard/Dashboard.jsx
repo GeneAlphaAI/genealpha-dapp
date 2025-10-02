@@ -10,6 +10,7 @@ import { formatPrice } from "../../utilities/helpers";
 import useTokenBalance from "../../utilities/useTokenBalance";
 import { useAccount } from "wagmi";
 import WorkInProgress from "../../components/training/WorkInProgress";
+// Comment
 const modelData = [
   {
     title: "LightGBM",
