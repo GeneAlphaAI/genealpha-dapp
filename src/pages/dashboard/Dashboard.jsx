@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { formatPrice } from "../../utilities/helpers";
 import useTokenBalance from "../../utilities/useTokenBalance";
 import { useAccount } from "wagmi";
+import WorkInProgress from "../../components/training/WorkInProgress";
 const modelData = [
   {
     title: "LightGBM",
@@ -159,6 +160,10 @@ const Dashboard = () => {
         <h1 className="text-inactive-text">{errorMessage}</h1>
       </div>
     );
+  }
+
+  if (liveModels?.models.length === 0 && !isLoading) {
+    return <WorkInProgress />;
   }
 
   return (
